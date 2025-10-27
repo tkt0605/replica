@@ -87,13 +87,13 @@ services:
 
   replica_frontend:
     build: 
-      context: ./frontend/replfront
+      context: ./frontend/repfront
       dockerfile: dockerfile.dev
     # 🧩 platform指定削除（Mac/WSL自動対応）
     volumes:
-      - ./frontend/replfront:/frontend/replfront
+      - ./frontend/repfront:/frontend/repfront
       # 🧱 node_modulesをホスト側で上書きしない（匿名ボリュームで保護）
-      - /frontend/replfront/node_modules
+      - /frontend/repfront/node_modules
     ports:
       - "5173:5173"
     dns:
