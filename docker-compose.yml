@@ -1,9 +1,74 @@
+# services:
+#   replica_backend:
+#     build:
+#       context: ./backend
+#       dockerfile: dockerfile.dev
+#     platform: linux/amd64
+#     dns:
+#       - 8.8.8.8
+#     env_file:
+#       - .env
+#     volumes:
+#       - ./backend:/backend
+#     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 120
+#     ports:
+#       - "8000:8000"
+#     environment:
+#       - DJANGO_SETTINGS_MODULES=config.settings
+#     depends_on:
+#       - replica_db
+#     networks:
+#       - replica_networks
+
+
+#   replica_frontend:
+#     build: 
+#       context: ./frontend/replfront
+#       dockerfile: dockerfile.dev
+#     platform: linux/amd64
+#     volumes:
+#       - ./frontend/replfront:/frontend/replfront
+#       - /frontend/replfront/node_modules/
+#     ports:
+#       - "3000:3000"
+#     dns:
+#       - 8.8.8.8
+#       - 1.1.1.1
+#     networks:
+#       - replica_networks
+#   replica_db:
+#     image: postgres:16
+#     env_file:
+#       - .env
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+#       - replica_db-data:/var/lib/postgresql/data
+#     networks:
+#       - replica_networks
+#   replica_nginx:
+#     image: nginx:latest
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#     depends_on:
+#       - replica_backend
+#       - replica_frontend
+#     networks:
+#       - replica_networks
+# volumes:
+#   replica_db-data:
+# networks:
+#   replica_networks:
+#     driver: bridge
 services:
   replica_backend:
     build:
       context: ./backend
       dockerfile: dockerfile.dev
-    platform: linux/amd64
+    # 🧩 platform指定は削除（自動判別でOK）
     dns:
       - 8.8.8.8
     env_file:
@@ -14,20 +79,20 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_SETTINGS_MODULES=config.settings
+      - DJANGO_SETTINGS_MODULE=config.settings  # ← モジュール名のtypo修正（MODULES→MODULE）
     depends_on:
       - replica_db
     networks:
       - replica_networks
 
-
   replica_frontend:
     build: 
       context: ./frontend/replfront
       dockerfile: dockerfile.dev
-    platform: linux/amd64
+    # 🧩 platform指定削除（Mac/WSL自動対応）
     volumes:
       - ./frontend/replfront:/frontend/replfront
+      # 🧱 node_modulesをホスト側で上書きしない（匿名ボリュームで保護）
       - /frontend/replfront/node_modules
     ports:
       - "5173:5173"
@@ -36,8 +101,9 @@ services:
       - 1.1.1.1
     networks:
       - replica_networks
+
   replica_db:
-    image: postgresql:16
+    image: postgres:16
     env_file:
       - .env
     ports:
@@ -47,9 +113,10 @@ services:
       - replica_db-data:/var/lib/postgresql/data
     networks:
       - replica_networks
+
   replica_nginx:
     image: nginx:latest
-    posts:
+    ports:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -58,10 +125,10 @@ services:
       - replica_frontend
     networks:
       - replica_networks
+
 volumes:
   replica_db-data:
+
 networks:
   replica_networks:
     driver: bridge
-    # driver_opts:
-    #   com.docker.network.bridge.name: replica_bridge
