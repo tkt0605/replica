@@ -1,14 +1,8 @@
-FROM node:20-alpine
-
+FROM node:20
 WORKDIR /frontend/repfront
-
 COPY package*.json ./
 RUN npm install
-
-COPY . .
-
-# Vite は 5173 を使う
-EXPOSE 5173
-
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
 # 0.0.0.0 で公開・ポート固定（strictPort）
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173", "--strictPort"]
