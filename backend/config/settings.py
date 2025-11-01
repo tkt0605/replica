@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os
+from datetime import timedelta
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,23 +25,35 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-b3f16tev6$kzlli6_#2!hdt=0^i)#5#!dhyoeyjy2w2w4=603l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(',')
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+    'rest_framework.authtoken',
+    'dj_rest_auth'
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,10 +61,56 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # デフォルトの認証バックエンド
+    'allauth.account.auth_backends.AuthenticationBackend',  # allauth用バックエンド
+]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'libra.serializers.CustomUserDetairlsSerializer',
+}
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),  # アクセストークンの有効期間
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),    # リフレッシュトークンの有効期間
+    'ROTATE_REFRESH_TOKENS': True,                 # リフレッシュ時に新しいリフレッシュトークンを発
+    "BLACKLIST_ALTER_ROTATION": False,
+}
 ROOT_URLCONF = 'config.urls'
-
+CORS_ALLOW_HEADERS = [
+    'authorization',
+    'content-type',
+    'x-csrftoken',
+    'accept',
+    'accept-encoding',
+    'origin',
+    'user-agent',
+    'x-requested-with',
+]
+CORS_ALLOWED_ORIGINS = [
+    # os.environ.get('CORS_ALLOWED_ORIGINS').split(',')
+    'http://localhost:5173',
+    'http://127.0.0.1:5173'
+]
+CSRF_TRUSTED_ORIGINS = [
+    # os.environ.get('CSRF_TRUSTED_ORIGINS').split(',')
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -75,8 +135,14 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD')
     }
 }
 
@@ -103,9 +169,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -115,9 +181,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-
+STATIC_URL = 'staticfiles/'
+STATIC_ROOT= BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'staticfiles'
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_USE_JWT = True
+# AUTH_USER_MODEL = 'api.CustomUser'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smap.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = '/auth/login'
+LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+APPEND_SLASH=False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]

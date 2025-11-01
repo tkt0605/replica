@@ -8,7 +8,7 @@ export default function Header() {
     { name: "About", path: "/about" },
     { name: "Library", path: "/library" },
   ];
-
+  
   return (
     <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
