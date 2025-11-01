@@ -1,1 +1,1 @@
-grant all privileges on database xero_db to takato;
+grant all privileges on database replica_db to takato;

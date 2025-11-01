@@ -2,7 +2,13 @@ FROM node:20
 WORKDIR /frontend/repfront
 COPY package*.json ./
 RUN npm install
+
+COPY . .
+
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true
-# 0.0.0.0 で公開・ポート固定（strictPort）
+ENV NODE_ENV=development
+
+EXPOSE 5173
+
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173", "--strictPort"]
