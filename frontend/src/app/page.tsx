@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const router = useRouter();
 
-  // 仮のAuth（本番ではContext化推奨）
+  //// 仮のAuth（本番ではContext化推奨）
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // LocalStorage → Next.js Client Componentでのみ読み取る
+  //// LocalStorage → Next.js Client Componentでのみ読み取る/ Djangoと統合をしていないので、今は削除
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
     if (token) setUser({ email: "test@example.com" });
@@ -50,7 +50,7 @@ export default function HomePage() {
               </span>
             </div>
           </div>
-          {loading ? (
+          {/* {loading ? (
             <div className="text-gray-300 text-sm">Loading...</div>
           ) : user ? (
             <div className="w-10 flex justify-center items-center">
@@ -77,8 +77,11 @@ export default function HomePage() {
               className="text-sm text-cyan-400 hover:text-cyan-300 transition">
               ログイン
             </button>
-          )}
-
+          )} */}
+          <button onClick={() => router.push("/auth/login")}
+              className="text-sm text-cyan-400 hover:text-cyan-300 transition">
+            ログイン
+          </button>
         </div>
       </header>
 
