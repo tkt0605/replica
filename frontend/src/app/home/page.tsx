@@ -3,6 +3,7 @@
 import { Header } from "@/components/replica/Header";
 import { Sidebar } from "@/components/replica/SideBar";
 import { MainShell } from "@/components/replica/MainShell";
+import { AvatarViewer } from "@/components/avatar/Avatarviewer";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -41,12 +42,14 @@ export default function Home() {
             <div className="flex flex-1">
                 {/* Sidebar */}
                 {isOpen && (
-                    <Sidebar />
+                    <Sidebar onClose={closeSidebar}/>
                 )}
 
                 {/* Main */}
                 <MainShell>
-                    <div></div>
+                    <div className="">
+                        {/* <AvatarViewer /> */}
+                    </div>
                 </MainShell>
             </div>
         </div>

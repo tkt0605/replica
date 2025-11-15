@@ -13,11 +13,10 @@ export function cn(...classes: (string | boolean | null | undefined)[]) {
 
 
 const items = [
-    { label: "検索する", icon:"🔍", },
-    { label: "ホーム", icon: "🏠", href: "/home" },
-    { label: "マイ・スタジオ", icon: "🧬", href: "/studio" },
-    { label: "ライブラリ", icon: "📚", href: "/libraries" },
-    //   { label: "使用デバイス", icon: "💾", href: "/devices" },
+    { label: "検索する" },
+    { label: "ホーム", href: "/home" },
+    { label: "スタジオ", href: "/studio" },
+      { label: "使用中のデバイス", href: "/devices" },
     //   { label: "設定", icon: "⚙️", href: "/settings" },
 ];
 
@@ -31,7 +30,7 @@ export function Sidebar({onClose}: SideBarProps) {
                     const active = pathname === item.href;
                     return (
                         <a key={item.label} href={item.href} className={cn("flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition",active ? "bg-white/10 text-white shadow-[0_0_18px_rgba(56,189,248,0.6)]" : "text-slate-400 hover:bg-white/5 hover:text-slate-50")}>
-                            <span className="text-lg">{item.icon}</span>
+                            {/* <span className="text-lg">{item.}</span> */}
                             <span>{item.label}</span>
                         </a>
                     );
