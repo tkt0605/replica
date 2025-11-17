@@ -3,25 +3,25 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-
+import { useEffect, useState, useContext } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  console.log('ログイン・ゆーざー:', user);
+});
 export default function HomePage() {
   const router = useRouter();
-
+  const auth = getAuth();
   // Auth（簡易）
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
-    if (token) setUser({ email: "test@example.com" });
-    setLoading(false);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    router.push("/auth/login");
-  };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("access_token");
+  //   router.push("/auth/login");
+  // };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#050509] text-white">
@@ -87,8 +87,9 @@ export default function HomePage() {
           <span className="text-white font-semibold">アプリ</span> と  
           <span className="text-cyan-300 font-semibold">思想</span> をまとめる
           <span className="text-purple-300 font-semibold">公式スタジオ</span>です。
-          世界に届けるべき作品は、すべてここから生まれる。
-        </motion.p>
+          僕が作ったアプリをここに発表します。
+          ここは、僕のApp Storeです。
+          </motion.p>
 
         {/* CTA */}
         <motion.div
@@ -128,19 +129,22 @@ export default function HomePage() {
           transition={{ duration: 1 }}
           className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed"
         >
-          Replica は、<span className="text-white font-semibold">創造</span> と  
+          {/* Replica は、<span className="text-white font-semibold">創造</span> と  
           <span className="text-purple-300 font-semibold">表現</span> に特化した  
-          <span className="text-cyan-300 font-semibold">デジタル・スタジオ</span>。
-
+          <span className="text-cyan-300 font-semibold">デジタル・スタジオ</span> */}
+          Replicaは,<span className="text-white font-semibold">０から１</span>ではなく。<span className="text-purple-300 font-semibold">１から２</span>を作り出す。
+          <br />
+          <span className="text-cyan-300 font-semibold">僕の僕による僕のためのサイトです。</span>
           <br /><br />
-          僕が生み出すすべてのアプリ、構想、プロトタイプを  
-          「**作品**」として世界に公開するための  
+          <span>僕が生み出すすべてのアプリ、構想、プロトタイプを</span>
+          <span>「**作品**」として世界に公開するための</span>
+          
           <strong className="text-white">公式プラットフォーム</strong>です。
 
           <br /><br />
           ここに並ぶアプリは、すべて僕自身の  
-          <span className="text-cyan-300 font-semibold">思想のレプリカ</span>。
-          そして世界と繋げる “窓” になる。
+          <span className="text-cyan-300 font-semibold">表現のレプリカ</span>。
+          そして世界と繋げる “窓” になる。   
         </motion.p>
       </section>
 
