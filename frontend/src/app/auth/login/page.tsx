@@ -69,6 +69,7 @@ export default function Login() {
       return router.push('/home');
     } catch (err: any) {
       setError(err.message);
+      return router.push('/auth/login');
     }
   };
 
@@ -106,22 +107,17 @@ export default function Login() {
                     placeholder="パスワード"
                 />
             </div>
-            <button
-                onClick={handleLogin}
-                className="w-full py-2.5 rounded-xl font-semibold text-sm 
-                bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500
-                hover:opacity-90 transition shadow-lg shadow-cyan-500/20"
-            >
+            <button onClick={handleLogin} className="w-full py-2.5 rounded-xl font-semibold text-sm  bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg shadow-cyan-500/20">
                 ログイン
             </button>
-             <SignInWithGoogle />
-            {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
             <div className="mt-4 text-center text-[11px] text-slate-100">
                 アカウントをお持ちではないですか。{" "}
                 <a href="/auth/signup" className="text-cyan-400 underline hover:text-cyan-300 cursor-pointer">
                     サインアップ
                 </a>
             </div>
+            <SignInWithGoogle />
+            {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
         </div>
       </div>
     </main>

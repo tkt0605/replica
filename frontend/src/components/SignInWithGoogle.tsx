@@ -1,19 +1,22 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
-
+import { useRouter } from "next/navigation";
 export const SignInWithGoogle = () => {
-    const handleGoogleLogin = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            await signInWithPopup(auth, provider);
-            alert("Google ログイン成功！");
-        } catch (err: any) {
-            console.error(err);
-            alert("Google ログインに失敗しました");
-        }
-    };
+  const router = useRouter();
+  const handleGoogleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      alert("Google ログイン成功！");
+      return router.push('/home');
+    } catch (err: any) {
+      console.error(err);
+      alert("Google ログインに失敗しました");
+      return router.push('/');
+    }
+  };
 
-    return (
+  return (
     <div className="mt-6">
       {/* 仕切り線 */}
       <div className="flex items-center mb-4">
@@ -21,36 +24,32 @@ export const SignInWithGoogle = () => {
       </div>
 
       {/* Google Login Button */}
-      <button
-        onClick={handleGoogleLogin}
-        className="w-full flex items-center justify-center gap-3 py-2 bg-white text-black rounded hover:bg-gray-200 transition"
-      >
-        {/* Googleアイコン（SVG） */}
-        <svg
-          className="w-5 h-5"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            fill="#EA4335"
-            d="M12 10.2v3.6h5.1c-.2 1.2-.8 2.2-1.7 3l2.7 2.1c1.6-1.5 2.6-3.7 2.6-6.3 0-.6 0-1.1-.1-1.6H12z"
-          />
-          <path
-            fill="#34A853"
-            d="M6.5 14.6c-.3-.9-.5-1.8-.5-2.6s.2-1.8.5-2.6L3.8 6.5A9.99 9.99 0 0 0 2 12c0 1.6.4 3.2 1.2 4.5l3.3-2z"
-          />
+      <button onClick={handleGoogleLogin} className="w-full flex items-center justify-center gap-3 px-5 py-2 bg-white text-black rounded hover:bg-gray-200 transition">
+        <svg className="w-5 h-5" viewBox="0 0 48 48" aria-hidden="true">
+          {/* Blue */}
           <path
             fill="#4285F4"
-            d="M12 5.2c1.4 0 2.7.5 3.7 1.4l2.7-2.7A9.93 9.93 0 0 0 12 2 10 10 0 0 0 3.8 6.5l3.3 2.1C7.4 6.6 9.5 5.2 12 5.2z"
+            d="M46.98 24.55c0-1.57-.15-3.08-.38-4.55H24v9.02h12.94c-.6 3.08-2.36 5.69-5.02 7.45l7.73 6C43.89 38.52 46.98 32.16 46.98 24.55z"
           />
+          {/* Green */}
+          <path
+            fill="#34A853"
+            d="M24 47c6.48 0 11.93-2.13 15.9-5.82l-7.73-6c-2.15 1.44-4.92 2.31-8.17 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.63 47 24 47z"
+          />
+          {/* Yellow */}
           <path
             fill="#FBBC05"
-            d="M12 22c2.7 0 5.1-1 6.9-2.6l-2.7-2.1c-1 .7-2.3 1.1-3.7 1.1-2.5 0-4.6-1.4-5.6-3.5l-3.3 2a10 10 0 0 0 9.4 5.1z"
+            d="M10.54 28.59c-.48-1.43-.76-2.94-.76-4.59 0-1.59.28-3.11.76-4.54l-7.98-6.19C1.03 16.07 0 19.41 0 23c0 3.59 1.03 6.93 2.56 9.73l7.98-6.19z"
+          />
+          {/* Red */}
+          <path
+            fill="#EA4335"
+            d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.63 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
           />
         </svg>
 
-        <span>Googleでログイン</span>
+        <span>Googleで続ける</span>
       </button>
     </div>
-    );
+  );
 };
