@@ -8,11 +8,10 @@ import { useEffect, useState } from "react";
 export default function HomePage() {
   const router = useRouter();
 
-  //// 仮のAuth（本番ではContext化推奨）
+  // Auth（簡易）
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  //// LocalStorage → Next.js Client Componentでのみ読み取る/ Djangoと統合をしていないので、今は削除
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
     if (token) setUser({ email: "test@example.com" });
@@ -25,103 +24,123 @@ export default function HomePage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0b0c14] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#050509] text-white">
 
-      {/* --- Subtle floating lights instead of heavy blur --- */}
+      {/* 背景：深い Apple 風グラデーション */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-[450px] h-[450px] bg-cyan-500/20 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-0 right-0 w-[380px] h-[380px] bg-purple-600/25 blur-[160px] rounded-full animate-pulse" />
+        <div className="absolute -top-40 -left-32 w-[600px] h-[600px] bg-cyan-500/20 blur-[160px] rounded-full opacity-60 animate-pulse" />
+        <div className="absolute bottom-0 right-0 w-[520px] h-[520px] bg-purple-600/25 blur-[200px] rounded-full opacity-70 animate-pulse" />
+        <div className="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-pink-500/20 blur-[180px] rounded-full opacity-60" />
       </div>
 
       {/* --------------------- Header --------------------- */}
-      <header className="fixed top-0 left-0 right-0 h-16 bg-[#0b0c14]/80 backdrop-blur-md border-b border-white/10 z-50">
-        <div className="h-full max-w-6xl mx-auto px-5 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 h-16 bg-[#050509]/70 backdrop-blur-md border-b border-white/10 z-50">
+        <div className="h-full max-w-6xl mx-auto px-6 flex items-center justify-between">
 
           {/* Logo */}
-          <div className="flex items-center gap-3 cursor-pointer select-none">
-            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-lg shadow-cyan-400/30" />
-            <span className="text-xl font-bold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-300">
+          <div
+            onClick={() => router.push("/")}
+            className="flex items-center gap-3 cursor-pointer select-none"
+          >
+            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-400 shadow-lg shadow-cyan-400/40" />
+            <span className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 drop-shadow-[0_0_20px_rgba(56,189,248,0.6)]">
               Replica
             </span>
           </div>
 
-          {/* ログイン */}
-          <button
-            onClick={() => router.push("/auth/login")}
-            className="text-sm text-cyan-300 hover:text-cyan-200 transition font-medium"
-          >
-            ログイン
-          </button>
+          <div className="flex items-center gap-6 text-sm">
+            <Link href="#concept" className="text-gray-300 hover:text-white transition">
+              コンセプト
+            </Link>
+            <Link href="/studio" className="text-gray-300 hover:text-white transition">
+              Studio
+            </Link>
+            <button
+              onClick={() => router.push("/auth/login")}
+              className="px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 transition"
+            >
+              ログイン
+            </button>
+          </div>
         </div>
       </header>
 
       {/* --------------------- Hero --------------------- */}
-      <section className="relative z-10 flex flex-col items-center justify-center h-screen text-center px-6">
+      <section className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6">
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-[64px] md:text-[82px] font-extrabold leading-none 
-                 bg-clip-text text-transparent 
-                 bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-300
-                 drop-shadow-[0_0_18px_rgba(56,189,248,0.45)]"
+          className="text-[62px] md:text-[84px] font-extrabold leading-none bg-clip-text text-transparent 
+                     bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300
+                     drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]"
         >
           Replica
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25, duration: 1 }}
-          className="mt-6 max-w-2xl text-lg text-gray-300 leading-relaxed"
+          transition={{ delay: 0.2, duration: 1 }}
+          className="mt-6 max-w-2xl text-lg md:text-xl text-gray-300 leading-relaxed"
         >
-          Replica は、<span className="text-white">アプリ</span> のための
-          <span className="text-cyan-400 font-semibold">デジタルスタジオ</span>です。
-          僕自身の表現を世界へ届けるためのプラットフォーム。
+          Replica は、僕が作るすべての
+          <span className="text-white font-semibold">アプリ</span> と  
+          <span className="text-cyan-300 font-semibold">思想</span> をまとめる
+          <span className="text-purple-300 font-semibold">公式スタジオ</span>です。
+          世界に届けるべき作品は、すべてここから生まれる。
         </motion.p>
 
-        {/* ボタン */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="mt-10 flex flex-col md:flex-row gap-4"
+          transition={{ delay: 0.4, duration: 1 }}
+          className="mt-12 flex flex-col md:flex-row gap-4"
         >
           <Link
             href="/auth/login"
-            className="px-7 py-3 rounded-full font-semibold 
-                   bg-gradient-to-r from-cyan-500 to-purple-500
-                   hover:scale-[1.04] transition-transform duration-300 shadow-lg shadow-cyan-500/30">
+            className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-cyan-500 to-purple-500
+                       hover:scale-[1.05] transition-transform duration-300 shadow-lg shadow-cyan-500/30">
             Replica をはじめる
           </Link>
 
-          <button className="px-7 py-3 rounded-full border border-white/20 text-gray-300 font-semibold hover:bg-white/10 transition">
+          {/* <Link
+            href="/studio"
+            className="px-8 py-3 rounded-full border border-white/20 text-gray-300 font-semibold hover:bg-white/10 transition">
             Studio を見る
-          </button>
+          </Link> */}
         </motion.div>
       </section>
 
-      {/* --------------------- Concept Section --------------------- */}
-      <section className="relative z-10 py-32 px-6 bg-gradient-to-b from-transparent via-[#12121e] to-[#0a0a13] text-center">
-
+      {/* --------------------- Concept --------------------- */}
+      <section id="concept" className="relative z-10 py-32 px-6 bg-gradient-to-b from-transparent via-[#10101A] to-[#0A0A12] text-center">
         <motion.h2
-          initial={{ opacity: 0, y: 18 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-4xl font-bold text-cyan-300 mb-7"
+          className="text-4xl md:text-5xl font-bold text-cyan-300 mb-8"
         >
           Replica とは
         </motion.h2>
 
         <motion.p
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="max-w-2xl mx-auto text-lg text-gray-300 leading-relaxed"
+          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed"
         >
-          Replica は、 <strong className="text-white">創造・設計・思想</strong> を
-          <span className="text-purple-300 font-semibold">Studio</span> という形で具現化し、
-          それを世界へ発信するための「スタジオ」であり「ストア」です。
+          Replica は、<span className="text-white font-semibold">創造</span> と  
+          <span className="text-purple-300 font-semibold">表現</span> に特化した  
+          <span className="text-cyan-300 font-semibold">デジタル・スタジオ</span>。
+
           <br /><br />
-          ここで生み出されるすべてが <strong className="text-cyan-300">レプリカ</strong> となるのです。
+          僕が生み出すすべてのアプリ、構想、プロトタイプを  
+          「**作品**」として世界に公開するための  
+          <strong className="text-white">公式プラットフォーム</strong>です。
+
+          <br /><br />
+          ここに並ぶアプリは、すべて僕自身の  
+          <span className="text-cyan-300 font-semibold">思想のレプリカ</span>。
+          そして世界と繋げる “窓” になる。
         </motion.p>
       </section>
 
@@ -131,6 +150,5 @@ export default function HomePage() {
       </footer>
 
     </div>
-
   );
 }
