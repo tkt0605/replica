@@ -38,18 +38,15 @@ export default function Home() {
     }
     const [studios, setStudios] = useState<any[]>([]);
 
-    useEffect(() => {
-        const fetchStudios = async () => {
-            const snap = await getDocs(
-                query(collection(db, "studios"), orderBy("createdAt", "desc"))
-            );
-            setStudios(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-        };
-        fetchStudios();
-    }, []);
-    const studioCounter = () => {
-
-    }
+    // useEffect(() => {
+    //     const fetchStudios = async () => {
+    //         const snap = await getDocs(
+    //             query(collection(db, "studios"), orderBy("createdAt", "desc"))
+    //         );
+    //         setStudios(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+    //     };
+    //     fetchStudios();
+    // }, []);
     return (
         <div className="min-h-screen flex flex-col bg-[#050510] text-slate-100">
             <Header onToggleSidebar={toggleSidebar} />
@@ -62,81 +59,53 @@ export default function Home() {
 
                 {/* Main */}
                 <MainShell>
-                    <main className="max-h-screen px-6 bg-[#050510] text-white relative overflow-hidden">
+                    {studios ?
+                        <main className="max-h-screen px-6 bg-[#050510] text-white relative overflow-hidden">
+                            <div className="absolute inset-0 -z-10 pointer-events-none">
+                                <div className="absolute -top-40 -left-24 w-[600px] h-[600px] bg-cyan-500/15 blur-[150px] rounded-full opacity-60" />
+                                <div className="absolute top-1/2 right-0 w-[520px] h-[520px] bg-purple-500/20 blur-[200px] rounded-full opacity-60" />
+                                <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] bg-blue-500/15 blur-[180px] rounded-full opacity-60" />
+                            </div>
+                            <div className="text-center mb-16">
+                                <h1 className="text-4xl font-bold tracking-wide bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 text-transparent bg-clip-text drop-shadow-[0_0_16px_rgba(56,189,248,0.4)]">
+                                    Studio - スタジオ
+                                </h1>
 
-                        {/* --- 背景光（Replica共通テーマ） --- */}
-                        <div className="absolute inset-0 -z-10 pointer-events-none">
-                            <div className="absolute -top-40 -left-24 w-[600px] h-[600px] bg-cyan-500/15 blur-[150px] rounded-full opacity-60" />
-                            <div className="absolute top-1/2 right-0 w-[520px] h-[520px] bg-purple-500/20 blur-[200px] rounded-full opacity-60" />
-                            <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] bg-blue-500/15 blur-[180px] rounded-full opacity-60" />
-                        </div>
+                                <p className="text-gray-400 mt-3">
+                                    ここは、僕が生み出したアプリの一覧です。気になるものはどうぞ使って見てください。
+                                </p>
+                            </div>
+                            <div className="max-w-6xl mx-auto flex justify-end mb-6">
+                                <button className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">
+                                    最新順
+                                </button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                {studios.map((s) => (
+                                    <StudioCard key={s.id} data={s} />
+                                ))}
+                            </div>
+                        </main>
+                        :
+                        <div className="flex flex-col items-center justify-center text-center py-32 relative">
+                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-cyan-500/20 blur-[160px] rounded-full" />
+                                <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-purple-500/20 blur-[200px] rounded-full" />
+                            </div>
+                            <h2 className="text-2xl md:text-3xl font-semibold text-slate-100 drop-shadow-sm">
+                                まだStudioがありません。
+                            </h2>
 
-                        {/* --- タイトル --- */}
-                        <div className="text-center mb-16">
-                            <h1 className="text-4xl font-bold tracking-wide bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 text-transparent bg-clip-text drop-shadow-[0_0_16px_rgba(56,189,248,0.4)]">
-                                Studio - スタジオ
-                            </h1>
-
-                            <p className="text-gray-400 mt-3">
-                                ここは、僕が生み出したアプリの一覧です。気になるものはどうぞ使って見てください。
+                            <p className="text-slate-400 mt-3 text-sm md:text-base leading-relaxed">
+                                最初のアプリを作成して、あなたの世界を“形”にしましょう。
                             </p>
-                        </div>
-
-                        {/* --- フィルタ / ソート（未来拡張対応） --- */}
-                        <div className="max-w-6xl mx-auto flex justify-end mb-6">
-                            <button className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">
-                                最新順
+                            <button
+                                className="mt-8 px-8 py-3 rounded-full text-sm md:text-base font-mediumbg-gradient-to-r from-cyan-500 to-purple-500hover:opacity-90 transition-allshadow-lg shadow-cyan-500/10"
+                            >
+                                新しいスタヂオを作る
                             </button>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            {studios.map((s) => (
-                                <StudioCard key={s.id} data={s} />
-                            ))}
-                        </div>
-                        {/* 
-                        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-                            {studios.map((s) => (
-                                <div
-                                    key={s.id}
-                                    className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl 
-                   shadow-[0_0_40px_rgba(0,0,0,0.45)] overflow-hidden transition transform 
-                   hover:-translate-y-1 hover:shadow-[0_0_60px_rgba(0,0,0,0.6)] cursor-pointer"
-                                >
-                                    {s.imageURL ? (
-                                        <div className="relative h-48 overflow-hidden">
-                                            <img
-                                                src={s.imageURL}
-                                                alt={s.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div className="h-48 bg-[#111] flex items-center justify-center text-gray-500">
-                                            No Image
-                                        </div>
-                                    )}
-                                    <div className="p-5">
-                                        <h2 className="text-lg font-semibold mb-1">{s.title}</h2>
-
-                                        <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed mb-3">
-                                            {s.description}
-                                        </p>
-                                        {s.url && (
-                                            <a
-                                                href={s.url}
-                                                target="_blank"
-                                                className="inline-block px-3 py-1 text-[11px] rounded-full bg-cyan-500/20 text-cyan-300 
-                         border border-cyan-400/20 hover:bg-cyan-500/30 transition"
-                                            >
-                                                外部リンク ↗
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div> */}
-                    </main>
-
+                    }
                 </MainShell>
             </div>
         </div>

@@ -4,24 +4,37 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState, useContext } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-  console.log('ログイン・ゆーざー:', user);
-});
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "@/firebase";
 export default function HomePage() {
   const router = useRouter();
-  const auth = getAuth();
   // Auth（簡易）
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("ログイン中ユーザー:", user);
+        console.log("UID:", user.uid);
+        console.log("Email:", user.email);
+        console.log("DisplayName:", user.displayName);
+        console.log("PhotoURL:", user.photoURL);
+        setUser(user);
+      } else {
+        console.log('未ログイン');
+        setUser(null);
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("access_token");
-  //   router.push("/auth/login");
-  // };
+  const JampTopage = () => {
+    if (user) {
+      return router.push('/home');
+    } else {
+      return router.push('/auth/login');
+    }
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#050509] text-white">
@@ -55,12 +68,30 @@ export default function HomePage() {
             <Link href="/studio" className="text-gray-300 hover:text-white transition">
               Studio
             </Link>
-            <button
-              onClick={() => router.push("/auth/login")}
-              className="px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 transition"
-            >
-              ログイン
-            </button>
+            {loading ?
+              <p>Loading...</p>
+              : user ?
+                <button
+                  className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 shadow-sm backdrop-blur-sm"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-6 h-6"
+                  >
+                    <circle cx="12" cy="7" r="4" />
+                    <path d="M5.5 20c1.5-3.5 11.5-3.5 13 0" />
+                  </svg>
+                </button>
+                : <button onClick={() => router.push("/auth/login")} className="px-4 py-1.5 rounded-full bg-white/10 text-cyan-300 hover:bg-white/20 transition">
+                  ログイン
+                </button>
+            }
+
           </div>
         </div>
       </header>
@@ -68,41 +99,24 @@ export default function HomePage() {
       {/* --------------------- Hero --------------------- */}
       <section className="relative z-10 h-screen flex flex-col items-center justify-center text-center px-6">
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-[62px] md:text-[84px] font-extrabold leading-none bg-clip-text text-transparent 
-                     bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300
-                     drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]"
-        >
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-[62px] md:text-[84px] font-extrabold leading-none bg-clip-text text-transparent  bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]">
           Replica
         </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 1 }}
-          className="mt-6 max-w-2xl text-lg md:text-xl text-gray-300 leading-relaxed"
-        >
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 1 }} className="mt-6 max-w-2xl text-lg md:text-xl text-gray-300 leading-relaxed">
           Replica は、僕が作るすべての
-          <span className="text-white font-semibold">アプリ</span> と  
+          <span className="text-white font-semibold">アプリ</span> と
           <span className="text-cyan-300 font-semibold">思想</span> をまとめる
           <span className="text-purple-300 font-semibold">公式スタジオ</span>です。
           僕が作ったアプリをここに発表します。
           ここは、僕のApp Storeです。
-          </motion.p>
+        </motion.p>
 
         {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 1 }}
-          className="mt-12 flex flex-col md:flex-row gap-4"
-        >
-          <Link
-            href="/auth/login"
-            className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-cyan-500 to-purple-500
-                       hover:scale-[1.05] transition-transform duration-300 shadow-lg shadow-cyan-500/30">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 1 }} className="mt-12 flex flex-col md:flex-row gap-4">
+          <button onClick={JampTopage} className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:scale-[1.05] transition-transform duration-300 shadow-lg shadow-cyan-500/30">
             Replica をはじめる
-          </Link>
+          </button>
 
           {/* <Link
             href="/studio"
@@ -114,37 +128,25 @@ export default function HomePage() {
 
       {/* --------------------- Concept --------------------- */}
       <section id="concept" className="relative z-10 py-32 px-6 bg-gradient-to-b from-transparent via-[#10101A] to-[#0A0A12] text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-4xl md:text-5xl font-bold text-cyan-300 mb-8"
-        >
+        <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-4xl md:text-5xl font-bold text-cyan-300 mb-8">
           Replica とは
         </motion.h2>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed"
-        >
-          {/* Replica は、<span className="text-white font-semibold">創造</span> と  
-          <span className="text-purple-300 font-semibold">表現</span> に特化した  
-          <span className="text-cyan-300 font-semibold">デジタル・スタジオ</span> */}
+        <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed">
+
           Replicaは,<span className="text-white font-semibold">０から１</span>ではなく。<span className="text-purple-300 font-semibold">１から２</span>を作り出す。
           <br />
           <span className="text-cyan-300 font-semibold">僕の僕による僕のためのサイトです。</span>
           <br /><br />
           <span>僕が生み出すすべてのアプリ、構想、プロトタイプを</span>
           <span>「**作品**」として世界に公開するための</span>
-          
+
           <strong className="text-white">公式プラットフォーム</strong>です。
 
           <br /><br />
-          ここに並ぶアプリは、すべて僕自身の  
+          ここに並ぶアプリは、すべて僕自身の
           <span className="text-cyan-300 font-semibold">表現のレプリカ</span>。
-          そして世界と繋げる “窓” になる。   
+          そして世界と繋げる “窓” になる。
         </motion.p>
       </section>
 
