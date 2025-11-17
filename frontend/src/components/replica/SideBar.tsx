@@ -16,7 +16,7 @@ const items = [
     { label: "検索する" },
     { label: "ホーム", href: "/home" },
     { label: "スタジオ", href: "/studio" },
-      { label: "使用中のデバイス", href: "/devices" },
+    //   { label: "使用中のデバイス", href: "/devices" },
     //   { label: "設定", icon: "⚙️", href: "/settings" },
 ];
 

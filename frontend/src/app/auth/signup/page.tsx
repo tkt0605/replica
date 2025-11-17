@@ -1,4 +1,23 @@
+"use client"
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase";
+import { useRouter } from "next/navigation";
+
 export default function Signup() {
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [error, setError] = useState<string>("");
+    const router = useRouter();
+    const handleSignup = async() =>{
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+            console.log("アカウント作成/成功");
+            return router.push("/home");
+        } catch (error: any) {
+            setError(error.message);
+        }
+    }
     return (
         <main className="min-h-screen flex flex-col items-center justify-center bg-[#050510] text-slate-100 px-4">
             <div className="flex ">
@@ -15,6 +34,8 @@ export default function Signup() {
                     <div className="mb-4">
                         <input
                             type="email"
+                            value={email}
+                            onChange={(e) => e.target.value}
                             className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-500/50 outline-none"
                             placeholder="メールアドレス"
                         />
@@ -22,11 +43,14 @@ export default function Signup() {
                     <div className="mb-6">
                         <input
                             type="password"
+                            value={password}
+                            onChange={(e) => e.target.value}
                             className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-purple-500/50 outline-none"
                             placeholder="パスワード"
                         />
                     </div>
                     <button
+                        onClick={handleSignup}
                         className="w-full py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg shadow-cyan-500/20"
                     >
                         続ける
