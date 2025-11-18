@@ -117,12 +117,6 @@ export default function HomePage() {
           <button onClick={JampTopage} className="px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:scale-[1.05] transition-transform duration-300 shadow-lg shadow-cyan-500/30">
             Replica をはじめる
           </button>
-
-          {/* <Link
-            href="/studio"
-            className="px-8 py-3 rounded-full border border-white/20 text-gray-300 font-semibold hover:bg-white/10 transition">
-            Studio を見る
-          </Link> */}
         </motion.div>
       </section>
 

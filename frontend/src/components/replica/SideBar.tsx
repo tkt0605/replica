@@ -13,9 +13,9 @@ export function cn(...classes: (string | boolean | null | undefined)[]) {
 
 
 const items = [
-    { label: "検索する" },
     { label: "ホーム", href: "/home" },
-    { label: "新規スタジオ", href: "/studio/new" },
+    { label: "作品一覧", href: "/studio" },
+    { label: "詳細ページ", href: "/about"},
     //   { label: "使用中のデバイス", href: "/devices" },
     //   { label: "設定", icon: "⚙️", href: "/settings" },
 ];
@@ -24,8 +24,7 @@ export function Sidebar({onClose}: SideBarProps) {
     const pathname = usePathname();
     const [open, setOpen] = useState();
     return (
-        <aside>
-        {/* <aside className="hidden md:flex flex-col w-60 pt-16 pb-6 px-4 bg-gradient-to-b from-[#0a0a0f] via-[#111122] to-[#050510] border-r border-white/5">
+        <aside className=" flex flex-col fixed top-1/2 -translate-y-1/2 left-6 justify-center  hidden md:flex flex-col w-50 pb-6 px-4 ">
             <nav className="space-y-1">
                 {items.map((item) => {
                     const active = pathname === item.href;
@@ -36,7 +35,6 @@ export function Sidebar({onClose}: SideBarProps) {
                     );
                 })}
             </nav>
-            <searchDialog open={open} onClose={() => setOpen(false)}/> */}
         </aside>
     );
 }

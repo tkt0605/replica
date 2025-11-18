@@ -38,7 +38,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         <header className="fixed top-0 inset-x-0 h-14 bg-gradient-to-br from-[#0a0a0f] via-[#111122] to-[#1a1a2e] border-b border-white/5 backdrop-blur z-30">
             <div className="max-w-9xl mx-auto h-full px-6 flex items-center gap-3">
                 {/* 左：ロゴ */}
-                <div onClick={() => {return router.push('/home');}} className="flex items-center gap-3 cursor-pointer select-none" >
+                <div className="flex items-center gap-3 cursor-pointer select-none" >
                     <button onClick={onToggleSidebar} className="h-7 w-7 hover:h-8 hover:w-8 transition-all duration-300 ease-out hover:scale-110  rounded-2xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" />
                     <span className="text-lg font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500 drop-shadow-[0_0_20px_rgba(56,189,248,0.6)]">
                         Replica
@@ -46,12 +46,11 @@ export function Header({ onToggleSidebar }: HeaderProps) {
                 </div>
                 <div className="flex-1" />
                 <div className="flex items-center gap-6 text-sm">
-                    <Link href="/about" className="text-gray-300 hover:text-white transition">
-                        詳細
-                    </Link>
-                    <Link href="/studio/new" className="text-gray-300 hover:text-white transition">
-                        スタジオを新規作成
-                    </Link>
+                    <button className="text-gray-700 hover:text-white duration-300 ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                        </svg>
+                    </button>
                     <div className="relative">
                         {loading ?
                             <p>loading...</p>
