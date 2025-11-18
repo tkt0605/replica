@@ -69,7 +69,7 @@ export default function StudioDetailPage() {
   ).toLocaleDateString("ja-JP");
 
   return (
-    <main className="min-h-screen bg-[#050510] text-white p-8 max-w-3xl mx-auto">
+    <main className="max-h-screen bg-[#050510] text-white max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold mb-4">{studio.title}</h1>
 
       {studio.imageURL && (

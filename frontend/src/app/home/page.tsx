@@ -1,8 +1,9 @@
 "use client";
-
+import Link from "next/link";
 import { Header } from "@/components/replica/Header";
 import { Sidebar } from "@/components/replica/SideBar";
 import { MainShell } from "@/components/replica/MainShell";
+import { useRouter } from "next/navigation";
 // import { AvatarViewer } from "@/components/avatar/Avatarviewer";
 import { useEffect, useState } from "react";
 import { db } from "@/firebase";
@@ -10,14 +11,29 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import StudioCard from "@/components/StudioCard";
 export default function Home() {
     const [isOpen, setIsOpen] = useState(false);
-
+    const router = useRouter();
+    const categories = ["すべて", "💻WEBアプリ", "📱iOSアプリ"];
+    const [selectedCategory, SetselectedCategory] = useState("すべて");
+    const [studios, setStudios] = useState<any[]>([]);
     // 初期読み込み時に localStorage の値を参照
     useEffect(() => {
         if (typeof window !== "undefined") {
             const saved = localStorage.getItem("aside_open");
             setIsOpen(saved === "true");
         }
+        const hash = decodeURIComponent(window.location.hash.replace('#', ''));
+        if (categories.includes(hash)) {
+            SetselectedCategory(hash);
+        }
     }, []);
+    const handleCategoryClick = (category: string) => {
+        SetselectedCategory(category);
+        window.location.hash = category;
+    };
+    const filteringCategory =
+        selectedCategory === 'すべて'
+            ? studios
+            : studios.filter((s) => s.category === selectedCategory);
 
     // Sidebar を開く
     const toggleSidebar = () => {
@@ -36,17 +52,16 @@ export default function Home() {
         setIsOpen(false);
         localStorage.removeItem("aside_open");
     }
-    const [studios, setStudios] = useState<any[]>([]);
 
-    // useEffect(() => {
-    //     const fetchStudios = async () => {
-    //         const snap = await getDocs(
-    //             query(collection(db, "studios"), orderBy("createdAt", "desc"))
-    //         );
-    //         setStudios(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-    //     };
-    //     fetchStudios();
-    // }, []);
+    useEffect(() => {
+        const fetchStudios = async () => {
+            const snap = await getDocs(
+                query(collection(db, "studios"), orderBy("createdAt", "desc"))
+            );
+            setStudios(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        };
+        fetchStudios();
+    }, []);
     return (
         <div className="min-h-screen flex flex-col bg-[#050510] text-slate-100">
             <Header onToggleSidebar={toggleSidebar} />
@@ -59,54 +74,105 @@ export default function Home() {
 
                 {/* Main */}
                 <MainShell>
-                    {studios ?
-                        <main className="max-h-screen px-6 bg-[#050510] text-white relative overflow-hidden">
-                            <div className="absolute inset-0 -z-10 pointer-events-none">
-                                <div className="absolute -top-40 -left-24 w-[600px] h-[600px] bg-cyan-500/15 blur-[150px] rounded-full opacity-60" />
-                                <div className="absolute top-1/2 right-0 w-[520px] h-[520px] bg-purple-500/20 blur-[200px] rounded-full opacity-60" />
-                                <div className="absolute bottom-0 left-1/3 w-[380px] h-[380px] bg-blue-500/15 blur-[180px] rounded-full opacity-60" />
-                            </div>
-                            <div className="text-center mb-16">
-                                <h1 className="text-4xl font-bold tracking-wide bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 text-transparent bg-clip-text drop-shadow-[0_0_16px_rgba(56,189,248,0.4)]">
-                                    Studio - スタジオ
-                                </h1>
+                    {/* カテゴリーメニュー */}
+                    <div className="flex items-center gap-4 mb-6 mt-2">
+                        {categories.map((item, i) => {
+                            const isActive = selectedCategory === item;
 
-                                <p className="text-gray-400 mt-3">
-                                    ここは、僕が生み出したアプリの一覧です。気になるものはどうぞ使って見てください。
-                                </p>
-                            </div>
-                            <div className="max-w-6xl mx-auto flex justify-end mb-6">
-                                <button className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-sm text-gray-300 hover:bg-white/10 transition">
-                                    最新順
+                            return (
+                                <button key={i} onClick={() => handleCategoryClick(item)} className={`relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 border backdrop-blur-sm ${isActive ? "text-white bg-white/20 border-cyan-400/50" : "text-slate-300 bg-white/5 border-white/10 hover:bg-white/10 hover:text-white"}`}>
+                                    {/* hover / active グラデーション光 */}
+                                    <span className={`absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 transition-opacity duration-500${isActive ? "opacity-100" : "opacity-0 hover:opacity-100"}`} />
+
+                                    <span className="relative z-10">{item}</span>
                                 </button>
+                            );
+                        })}
+                    </div>
+                    {studios?.length === 0 && (
+                        <div className="text-center py-20 opacity-80">
+                            <div className="text-lg font-semibold mb-3 text-slate-300">
+                                まだスタジオがありません
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {studios.map((s) => (
-                                    <StudioCard key={s.id} data={s} />
-                                ))}
+                            <div className="text-sm text-slate-500 mb-6">
+                                マジですみません。まだ完成してません。
                             </div>
-                        </main>
-                        :
-                        <div className="flex flex-col items-center justify-center text-center py-32 relative">
-                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                <div className="absolute top-1/3 left-1/4 w-[400px] h-[400px] bg-cyan-500/20 blur-[160px] rounded-full" />
-                                <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-purple-500/20 blur-[200px] rounded-full" />
-                            </div>
-                            <h2 className="text-2xl md:text-3xl font-semibold text-slate-100 drop-shadow-sm">
-                                まだStudioがありません。
-                            </h2>
 
-                            <p className="text-slate-400 mt-3 text-sm md:text-base leading-relaxed">
-                                最初のアプリを作成して、あなたの世界を“形”にしましょう。
-                            </p>
-                            <button
-                                className="mt-8 px-8 py-3 rounded-full text-sm md:text-base font-mediumbg-gradient-to-r from-cyan-500 to-purple-500hover:opacity-90 transition-allshadow-lg shadow-cyan-500/10"
-                            >
-                                新しいスタヂオを作る
+                            <button className="px-6 py-3 rounded-xl font-medium text-smbg-gradient-to-r from-cyan-500 to-purple-500shadow-lg shadow-cyan-500/30hover:shadow-purple-500/40 hover:scale-105transition-transform duration-300 text-white">
+                                新しくスタジオを作成
                             </button>
                         </div>
-                    }
+                    )}
+                    {/* フィルタ後のスタジオ一覧 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        {filteringCategory.map((studio) => (
+                            <div key={studio.id} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-lg">
+                                <h2 className="text-lg font-semibold mb-2">{studio.title}</h2>
+                                <p className="text-sm text-slate-400 mb-3">{studio.description}</p>
+                                <button className="text-sm text-cyan-400 hover:underline">
+                                    詳細を見る →
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* カテゴリに該当なし */}
+                    {/* {filteringCategory.length === 0 && (
+                        <div className="text-center text-slate-400 py-20">
+                            このカテゴリのスタジオはまだありません。
+                        </div>
+                    )} */}
                 </MainShell>
+                {/* <MainShell>
+                    <div className="flex items-center gap-4 mb-6 mt-2">
+                        {categories.map((item, i) => (
+                            <button key={i} className=" relative px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-all duration-300 bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10">
+                                <span className=" absolute inset-0 rounded-xl  bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20  opacity-0 hover:opacity-100 transition-opacity duration-500"></span>
+                                <span className="relative z-10">{item}</span>
+                            </button>
+                        ))}
+                    </div>
+                    <div className="mt-6">
+                        {studios?.length === 0 && (
+                            <div className="text-center py-20 opacity-80">
+                                <div className="text-lg font-semibold mb-3 text-slate-300">
+                                    まだスタジオがありません
+                                </div>
+                                <div className="text-sm text-slate-500 mb-6">
+                                    マジですみません。まだ完成してません。
+                                </div>
+
+                                <button className="px-6 py-3 rounded-xl font-medium text-smbg-gradient-to-r from-cyan-500 to-purple-500shadow-lg shadow-cyan-500/30hover:shadow-purple-500/40 hover:scale-105transition-transform duration-300 text-white">
+                                    新しくスタジオを作成
+                                </button>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {studios?.map((studio) => (
+                                <div
+                                    key={studio.id}
+                                    className="group relative rounded-2xl p-5bg-white/5 border border-white/10 backdrop-blur-mdhover:bg-white/10 transition-all duration-500shadow-lg hover:shadow-cyan-500/20"
+                                >
+                                    <div className=" absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                                    <div className="relative z-10">
+                                        <h2 className="text-lg font-semibold text-white mb-1">
+                                            {studio.title}
+                                        </h2>
+                                        <p className="text-sm text-slate-400 mb-4">
+                                            {studio.description}
+                                        </p>
+
+                                        <button className=" px-4 py-2 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 transition-all duration-300">
+                                            詳細を見る →
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </MainShell> */}
+
             </div>
         </div>
     );
