@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { p } from "framer-motion/client";
 type HeaderProps = {
     onToggleSidebar: () => void;
+    // onToggleDrawer: () => void;
 }
 export function Header({ onToggleSidebar }: HeaderProps) {
     const router = useRouter();

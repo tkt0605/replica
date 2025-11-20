@@ -62,12 +62,12 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center gap-6 text-sm">
-            <Link href="#concept" className="text-gray-300 hover:text-white transition">
+            {/* <Link href="#concept" className="text-gray-300 hover:text-white transition">
               コンセプト
             </Link>
             <Link href="/studio" className="text-gray-300 hover:text-white transition">
               Studio
-            </Link>
+            </Link> */}
             {loading ?
               <p>Loading...</p>
               : user ?

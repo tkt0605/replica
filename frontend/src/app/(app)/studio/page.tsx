@@ -63,16 +63,15 @@ export default function Studio() {
         fetchStudios();
     }, []);
     return (
-        <div className="min-h-screen flex flex-col bg-[#050510] text-slate-100 duration-300">
-            <Header onToggleSidebar={toggleSidebar} />
+        <div className="min-h-screen flex bg-[#050510] text-slate-100">
+            {isOpen ? (
+                <Sidebar onClose={closeSidebar} />
+            ) : (
+                <div className="flex" />
+            )}
+            <Header onToggleSidebar={toggleSidebar}/>
 
             <div className="flex flex-1">
-                
-                {isOpen ? (
-                    <Sidebar onClose={closeSidebar} />
-                ):(
-                    <div className="flex"/>
-                )}
                 {/* <Sidebar onClose={closeSidebar} /> */}
                 {/* Main */}
                 <MainShell>
@@ -100,8 +99,8 @@ export default function Studio() {
                                 マジですみません。まだ完成してません。
                             </div>
 
-                            <button className="px-6 py-3 rounded-xl font-medium text-smbg-gradient-to-r from-cyan-500 to-purple-500shadow-lg shadow-cyan-500/30hover:shadow-purple-500/40 hover:scale-105transition-transform duration-300 text-white">
-                                新しくスタジオを作成
+                            <button onClick={() => { return router.push('/studio/new') }} className="hover:bg-white/10 px-6 py-3 rounded-xl font-medium text-smbg-gradient-to-r from-cyan-500 to-purple-500shadow-lg shadow-cyan-500/30hover:shadow-purple-500/40 hover:scale-105transition-transform duration-300 text-white">
+                                ＋ 新しくスタジオを作成
                             </button>
                         </div>
                     )}
@@ -117,63 +116,7 @@ export default function Studio() {
                             </div>
                         ))}
                     </div>
-
-                    {/* カテゴリに該当なし */}
-                    {/* {filteringCategory.length === 0 && (
-                        <div className="text-center text-slate-400 py-20">
-                            このカテゴリのスタジオはまだありません。
-                        </div>
-                    )} */}
                 </MainShell>
-                {/* <MainShell>
-                    <div className="flex items-center gap-4 mb-6 mt-2">
-                        {categories.map((item, i) => (
-                            <button key={i} className=" relative px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-all duration-300 bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10">
-                                <span className=" absolute inset-0 rounded-xl  bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20  opacity-0 hover:opacity-100 transition-opacity duration-500"></span>
-                                <span className="relative z-10">{item}</span>
-                            </button>
-                        ))}
-                    </div>
-                    <div className="mt-6">
-                        {studios?.length === 0 && (
-                            <div className="text-center py-20 opacity-80">
-                                <div className="text-lg font-semibold mb-3 text-slate-300">
-                                    まだスタジオがありません
-                                </div>
-                                <div className="text-sm text-slate-500 mb-6">
-                                    マジですみません。まだ完成してません。
-                                </div>
-
-                                <button className="px-6 py-3 rounded-xl font-medium text-smbg-gradient-to-r from-cyan-500 to-purple-500shadow-lg shadow-cyan-500/30hover:shadow-purple-500/40 hover:scale-105transition-transform duration-300 text-white">
-                                    新しくスタジオを作成
-                                </button>
-                            </div>
-                        )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                            {studios?.map((studio) => (
-                                <div
-                                    key={studio.id}
-                                    className="group relative rounded-2xl p-5bg-white/5 border border-white/10 backdrop-blur-mdhover:bg-white/10 transition-all duration-500shadow-lg hover:shadow-cyan-500/20"
-                                >
-                                    <div className=" absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                                    <div className="relative z-10">
-                                        <h2 className="text-lg font-semibold text-white mb-1">
-                                            {studio.title}
-                                        </h2>
-                                        <p className="text-sm text-slate-400 mb-4">
-                                            {studio.description}
-                                        </p>
-
-                                        <button className=" px-4 py-2 text-xs rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 transition-all duration-300">
-                                            詳細を見る →
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </MainShell> */}
 
             </div>
         </div>
