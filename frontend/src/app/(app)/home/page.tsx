@@ -176,105 +176,105 @@ export default function Home() {
         //         </MainShell>
         //     </div>
         // </div>
-        <div className="min-h-screen bg-[#050510] text-slate-100 flex">
-            {/* --- メイン領域 --- */}
-            <div className="flex-1 md:ml-60 min-h-screen flex flex-col">
-                {/* MainShell：自然な余白を統合 */}
-                <MainShell>
-                    <main className="px-6 py-8 space-y-14">
+        // <div className="min-h-screen bg-[#050510] text-slate-100 flex">
+        //     {/* --- メイン領域 --- */}
+        //     <div className="flex-1 md:ml-60 min-h-screen flex flex-col">
+        //         {/* MainShell：自然な余白を統合 */}
+        <MainShell>
+            <main className="px-6 py-8 space-y-14">
 
-                        {/* --- Dashboard Header --- */}
-                        <section>
-                            <h1 className="text-4xl mb-4 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]">
-                                こんにちは <span className="text-white">{/* user.name */}</span>
-                            </h1>
-                            <h2 className="text-2xl font-bold mb-3">Replica - ダッシュボード</h2>
+                {/* --- Dashboard Header --- */}
+                <section>
+                    <h1 className="text-4xl mb-4 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]">
+                        こんにちは <span className="text-white">{/* user.name */}</span>
+                    </h1>
+                    <h2 className="text-2xl font-bold mb-3">Replica - ダッシュボード</h2>
 
-                            <p className="text-slate-300 max-w-2xl leading-relaxed">
-                                自分が作成したアプリやプロジェクトの進行状況をまとめているページです。
-                                公開中のもの、進行中のものをシンプルに整理しています。
+                    <p className="text-slate-300 max-w-2xl leading-relaxed">
+                        自分が作成したアプリやプロジェクトの進行状況をまとめているページです。
+                        公開中のもの、進行中のものをシンプルに整理しています。
+                    </p>
+                </section>
+
+                {/* --- Recent Updates --- */}
+                <section className="space-y-6">
+                    <div className="flex items-center gap-6">
+                        <h3 className="text-xl font-semibold">最近の更新</h3>
+                        <button
+                            onClick={() => setOpenUpdated(true)}
+                            className="hover:bg-white/10 px-3 py-1 bg-white/5 rounded-xl border border-white/10"
+                        >
+                            + add
+                        </button>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08]">
+                            <p className="text-sm text-slate-300">2025/11/17</p>
+                            <p className="text-lg font-semibold mt-1">Whisper 音声認識の精度を改善</p>
+                            <p className="text-slate-400 text-sm mt-1">
+                                認識の重複語句除去アルゴリズムを改善し精度が上昇。
                             </p>
-                        </section>
+                        </div>
+                    </div>
+                </section>
 
-                        {/* --- Recent Updates --- */}
-                        <section className="space-y-6">
-                            <div className="flex items-center gap-6">
-                                <h3 className="text-xl font-semibold">最近の更新</h3>
-                                <button
-                                    onClick={() => setOpenUpdated(true)}
-                                    className="hover:bg-white/10 px-3 py-1 bg-white/5 rounded-xl border border-white/10"
-                                >
-                                    + add
-                                </button>
-                            </div>
+                {/* --- Work in Progress --- */}
+                <section className="space-y-6">
+                    <div className="flex items-center gap-6">
+                        <h3 className="text-xl font-semibold">進行中</h3>
+                        <button
+                            onClick={() => setOpenProgress(true)}
+                            className="hover:bg-white/10 px-3 py-1 bg-white/5 rounded-xl border border-white/10"
+                        >
+                            + add
+                        </button>
+                    </div>
 
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08]">
-                                    <p className="text-sm text-slate-300">2025/11/17</p>
-                                    <p className="text-lg font-semibold mt-1">Whisper 音声認識の精度を改善</p>
-                                    <p className="text-slate-400 text-sm mt-1">
-                                        認識の重複語句除去アルゴリズムを改善し精度が上昇。
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
+                    <div className="grid md:grid-cols-3 gap-6">
+                        <div className="bg-white/[0.04] p-5 rounded-xl border border-white/[0.08]">
+                            <p className="font-semibold text-lg">Replica ID</p>
+                            <p className="text-slate-400 text-sm mb-3">分散型デジタルIDの仕組みを構築中。</p>
+                            <span className="text-xs px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">
+                                構築中
+                            </span>
+                        </div>
+                    </div>
+                </section>
 
-                        {/* --- Work in Progress --- */}
-                        <section className="space-y-6">
-                            <div className="flex items-center gap-6">
-                                <h3 className="text-xl font-semibold">進行中</h3>
-                                <button
-                                    onClick={() => setOpenProgress(true)}
-                                    className="hover:bg-white/10 px-3 py-1 bg-white/5 rounded-xl border border-white/10"
-                                >
-                                    + add
-                                </button>
-                            </div>
+                {/* --- Quick Links --- */}
+                <section className="space-y-6 pb-20">
+                    <h3 className="text-xl font-semibold">省略</h3>
 
-                            <div className="grid md:grid-cols-3 gap-6">
-                                <div className="bg-white/[0.04] p-5 rounded-xl border border-white/[0.08]">
-                                    <p className="font-semibold text-lg">Replica ID</p>
-                                    <p className="text-slate-400 text-sm mb-3">分散型デジタルIDの仕組みを構築中。</p>
-                                    <span className="text-xs px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300">
-                                        構築中
-                                    </span>
-                                </div>
-                            </div>
-                        </section>
+                    <div className="grid md:grid-cols-3 gap-4">
+                        <a href="/studio" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
+                            <p className="font-semibold text-lg">Studios</p>
+                            <p className="text-slate-400 text-sm">アプリ一覧を見る</p>
+                        </a>
 
-                        {/* --- Quick Links --- */}
-                        <section className="space-y-6 pb-20">
-                            <h3 className="text-xl font-semibold">省略</h3>
+                        <a href="https://github.com/tkt0605" target="_blank" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
+                            <p className="font-semibold text-lg">GitHub</p>
+                            <p className="text-slate-400 text-sm">コードとリポジトリ</p>
+                        </a>
 
-                            <div className="grid md:grid-cols-3 gap-4">
-                                <a href="/studio" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
-                                    <p className="font-semibold text-lg">Studios</p>
-                                    <p className="text-slate-400 text-sm">アプリ一覧を見る</p>
-                                </a>
+                        <a href="/about" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
+                            <p className="font-semibold text-lg">About</p>
+                            <p className="text-slate-400 text-sm">開発者について</p>
+                        </a>
+                    </div>
+                </section>
+            </main>
 
-                                <a href="https://github.com/tkt0605" target="_blank" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
-                                    <p className="font-semibold text-lg">GitHub</p>
-                                    <p className="text-slate-400 text-sm">コードとリポジトリ</p>
-                                </a>
+            {/* ダイヤログ */}
+            <Dialogs open={openUpdate} onClose={() => setOpenUpdated(false)} title="最新の更新">
+                <CreateUpdate open={openUpdate} onClose={() => setOpenUpdated(false)} />
+            </Dialogs>
 
-                                <a href="/about" className="bg-white/[0.04] p-4 rounded-xl border border-white/[0.08] hover:bg-white/[0.08] transition">
-                                    <p className="font-semibold text-lg">About</p>
-                                    <p className="text-slate-400 text-sm">開発者について</p>
-                                </a>
-                            </div>
-                        </section>
-                    </main>
-
-                    {/* ダイヤログ */}
-                    <Dialogs open={openUpdate} onClose={() => setOpenUpdated(false)} title="最新の更新">
-                        <CreateUpdate open={openUpdate} onClose={() => setOpenUpdated(false)} />
-                    </Dialogs>
-
-                    <Dialogs open={openProgress} onClose={() => setOpenProgress(false)} title="進行中のプロジェクト">
-                        <CreateProgress open={openProgress} onClose={() => setOpenProgress(false)} />
-                    </Dialogs>
-                </MainShell>
-            </div>
-        </div>
+            <Dialogs open={openProgress} onClose={() => setOpenProgress(false)} title="進行中のプロジェクト">
+                <CreateProgress open={openProgress} onClose={() => setOpenProgress(false)} />
+            </Dialogs>
+        </MainShell>
+        //     </div>
+        // </div>
     );
 }
