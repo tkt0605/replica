@@ -4,9 +4,12 @@ import { useState } from "react";
 import searchDialog from "../searchDialog";
 import { usePathname } from "next/navigation";
 import { aside, label } from "framer-motion/client";
-type SideBarProps = {
-    onClose: () => void;
-}
+// type SideBarProps = {
+//     onClose: () => void;
+// }
+// type HeaderProps = {
+//     onToggleSidebar: () => void;
+// }
 export function cn(...classes: (string | boolean | null | undefined)[]) {
     return classes.filter(Boolean).join(" ");
 }
@@ -16,17 +19,22 @@ const items = [
     { label: "ホーム", href: "/home" },
     { label: "作品一覧", href: "/studio" },
     { label: "詳細ページ", href: "/about" },
-    //   { label: "使用中のデバイス", href: "/devices" },
-    //   { label: "設定", icon: "⚙️", href: "/settings" },
 ];
 
-export function Sidebar({ onClose }: SideBarProps) {
+export function Sidebar() {
     const pathname = usePathname();
     const [open, setOpen] = useState();
     return (
 
-        <aside className="hidden sm:flex flex-col fixed w-60 justify-center top-0 left-0 h-screen bg-[#06060f]/80 p-2 gap-2 z-10 ">
-            <nav className="space-y-2">
+        <aside className="hidden sm:flex flex-col fixed w-60 top-0 left-0 h-screen bg-[#000000] p-4 gap-2 z-10 ">
+            <div className="mb-[187px]">
+                <div className=" flex items-center justify-between " >
+                    <span className="text-2xl font-bold tracking-tighter text-white">
+                        Replica
+                    </span>
+                </div>
+            </div>
+            <nav className="space-y-2 gap-2">
                 {items.map((item) => {
                     const active = pathname === item.href;
                     return (
