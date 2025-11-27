@@ -56,7 +56,7 @@ export default function Studio() {
                 {/* <div className="hidden md:block w-64 border-r border-white/10">...</div> */}
 
                 <div className="flex flex-1 flex-col">
-                    <main className="flex-1 px-6 py-12 max-w-7xl mx-auto w-full">
+                    <main className="flex-1 px-6 py-8 max-w-7xl mx-auto w-full">
 
                         {/* --- Page Title --- */}
                         <div className="mb-10">
@@ -95,7 +95,7 @@ export default function Studio() {
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="flex flex-col items-center justify-center py-32 text-center"
+                                className="flex flex-col items-center justify-center py-16 text-center"
                             >
                                 <div className="w-20 h-20 rounded-3xl bg-[#1c1c1e] flex items-center justify-center mb-6 border border-white/5">
                                     <FolderOpen className="w-10 h-10 text-[#86868b]" />

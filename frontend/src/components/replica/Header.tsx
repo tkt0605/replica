@@ -108,9 +108,7 @@ export function Header() {
                     </div>
                 </div>
             </header>
-            <Dialogs open={openSearch} onClose={() => setOpenSearch(false)} title="検索">
-
-            </Dialogs>
+            <Dialogs open={openSearch} onClose={() => setOpenSearch(false)} title="検索"></Dialogs>
         </div>
     );
 }

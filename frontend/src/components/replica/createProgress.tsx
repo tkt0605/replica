@@ -35,6 +35,7 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
   ]
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!open) return;
       if (user) {
         console.log('ログイン・ユーザ', user);
         setUser(user);
@@ -45,7 +46,8 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [open]);
+  if (!open) return;
   const ToogleTags = (tag: string) => {
     if (tags.includes(tag)) {
       setTags(tags.filter((t) => t !== tag));
@@ -54,11 +56,9 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
     }
   };
   const hundleSubmit = async () => {
-    if (!user) return alert('ログインして');
-    if (!title) return alert('タイトルくれメンス');
     try {
       await addDoc(collection(db, "progress"), {
-        ownerId: user.id,
+        ownerId: user.uid,
         title: title,
         nemo: nemo,
         tags,
@@ -71,65 +71,99 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
     }
   };
   return (
-    <div
-      className=" p-6 "
-      onClick={(e) => e.stopPropagation()}
-    >
-      {/* <h2 className="text-xl font-bold mb-4 text-cyan-300 tracking-wide">
-    Create Progress
-  </h2> */}
+<div
+  className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-50 p-4"
+  onClick={onClose}
+>
 
-      <div className="space-y-3 mb-4">
-        <input
-          type="text"
-          placeholder="タイトル"
-          value={title}
-          onChange={(e) => SetTitle(e.target.value)}
-          className="w-full px-3 py-2 bg-[#0f0f1f] border border-cyan-400/30 rounded outline-none text-white focus:border-cyan-300"
-        />
+  <div
+    className="w-full max-w-lg bg-[#0a0a0f]/90 border border-white/10 rounded-2xl shadow-2xl shadow-cyan-500/10 p-6 space-y-6 relative"
+    onClick={(e) => e.stopPropagation()}
+  >
 
-        <textarea
-          placeholder="内容"
-          rows={3}
-          value={nemo}
-          onChange={(e) => setNemo(e.target.value)}
-          className="w-full px-3 py-2 bg-[#0f0f1f] border border-cyan-400/30 rounded outline-none text-white focus:border-cyan-300"
-        />
-      </div>
+    {/* --- Header --- */}
+    <div className="flex items-center justify-between">
+      <h2 className="text-xl font-semibold text-white tracking-wide">
+        新規投稿
+      </h2>
+      <button
+        onClick={onClose}
+        className="text-gray-400 hover:text-white transition"
+      >
+        ✕
+      </button>
+    </div>
 
-      <p className="mb-2 text-sm text-cyan-400">タグ</p>
+    {/* --- Title --- */}
+    <input
+      type="text"
+      placeholder="タイトル"
+      value={title}
+      onChange={(e) => SetTitle(e.target.value)}
+      className="w-full px-4 py-3 bg-[#0c0c17] border border-white/10 
+                 rounded-lg outline-none text-white placeholder-gray-500
+                 focus:border-cyan-400/50 transition"
+    />
 
-      <div className="flex flex-wrap gap-2 mb-6">
-        {availableTags.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => ToogleTags(tag)}
-            className={`px-3 py-1 rounded-sm text-sm border transition ${tags.includes(tag)
-                ? "bg-cyan-400/20 border-cyan-300 text-cyan-200"
-                : "bg-[#0f0f1f] border-cyan-300/20 text-cyan-300 hover:border-cyan-300"
-              }`}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
+    {/* --- Content --- */}
+    <textarea
+      placeholder="内容を入力..."
+      rows={4}
+      value={nemo}
+      onChange={(e) => setNemo(e.target.value)}
+      className="w-full px-4 py-3 bg-[#0c0c17] border border-white/10 
+                 rounded-lg outline-none text-white placeholder-gray-500
+                 focus:border-cyan-400/50 transition resize-none"
+    />
 
-      <div className="flex items-center justify-end gap-2">
-        <button
-          onClick={hundleSubmit}
-          className="w-24 py-2 rounded bg-cyan-400 text-black hover:bg-cyan-300 "
-        >
-          投稿
-        </button>
+    {/* --- Tags --- */}
+    <div>
+      <p className="mb-2 text-sm text-cyan-300 font-medium">タグ</p>
 
-        <button
-          onClick={onClose}
-          className="w-24 py-2 rounded bg-[#0f0f1f] border border-cyan-400/20 text-cyan-200 hover:bg-[#131326]"
-        >
-          閉じる
-        </button>
+      <div className="flex flex-wrap gap-2">
+        {availableTags.map((tag) => {
+          const active = tags.includes(tag);
+
+          return (
+            <button
+              key={tag}
+              onClick={() => ToogleTags(tag)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition
+                ${
+                  active
+                    ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-[0_0_8px_rgba(0,255,255,0.25)]"
+                    : "bg-[#0c0c17] border-white/10 text-gray-300 hover:border-cyan-300 hover:text-cyan-200"
+                }
+              `}
+            >
+              {tag}
+            </button>
+          );
+        })}
       </div>
     </div>
+
+    {/* --- Buttons --- */}
+    <div className="flex justify-end gap-3 pt-4">
+      <button
+        onClick={onClose}
+        className="px-4 py-2 rounded-lg bg-[#0c0c17] border border-white/10 
+                  text-gray-300 hover:bg-[#12121f] transition"
+      >
+        閉じる
+      </button>
+
+      <button
+        onClick={hundleSubmit}
+        className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 
+                   text-black font-semibold shadow-lg shadow-cyan-500/20
+                   hover:from-cyan-300 hover:to-blue-400 transition"
+      >
+        投稿
+      </button>
+    </div>
+  </div>
+</div>
 
   );
 }

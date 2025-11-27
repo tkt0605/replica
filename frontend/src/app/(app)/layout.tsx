@@ -28,21 +28,6 @@ export default function DashbordLayout({ children }) {
         });
         return () => unsubscribe()
     }, []);
-    // const toggleSidebar = () => {
-    //     setOpen(prev => {
-    //         const next = !prev;
-    //         if (next) {
-    //             localStorage.setItem("aside_open", "true");
-    //         } else {
-    //             localStorage.removeItem("aside_open");
-    //         }
-    //         return next;
-    //     });
-    // };
-    // const closeSideBar = ()=>{
-    //     setOpen(false);
-    //     localStorage.removeItem("aside_open");
-    // }
     const toggleSidebar = async () => {
         setOpen(prev => {
             const next = !prev;
@@ -86,50 +71,3 @@ export default function DashbordLayout({ children }) {
         </div>
     );
 }
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { Sidebar } from "@/components/replica/SideBar";
-// import { Header } from "@/components/replica/Header";
-// import { MobileSidebar } from "@/components/replica/MobileSidebar";
-// import { auth } from "@/firebase";
-// import { onAuthStateChanged } from "firebase/auth";
-
-// export default function DashboardLayout({ children }) {
-//     const [user, setUser] = useState<any>(null);
-//     const [loading, setLoading] = useState<any>(true);
-
-//     useEffect(() => {
-//         const unsubscribe = onAuthStateChanged(auth, (user) => {
-//             setUser(user);
-//             setLoading(false);
-//         });
-//         return () => unsubscribe();
-//     }, []);
-
-//     if (loading) return null;
-
-//     return (
-//         <div className="min-h-screen bg-[#050510] text-white">
-//             {/* ===== Header ===== */}
-//             <Header />
-
-//             {/* ===== Mobile Drawer Sidebar ===== */}
-//             <MobileSidebar />
-
-//             {/* ===== Main Layout ===== */}
-//             <div className="flex">
-                
-//                 {/* --- PC Sidebar (固定) --- */}
-//                 <aside className="hidden md:block w-60 h-screen sticky top-0 border-r border-white/10">
-//                     <Sidebar />
-//                 </aside>
-
-//                 {/* --- Content --- */}
-//                 <main className="flex-1 min-h-screen px-6 py-4">
-//                     {children}
-//                 </main>
-//             </div>
-//         </div>
-//     );
-// }

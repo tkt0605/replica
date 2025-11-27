@@ -1,85 +1,124 @@
-"use client";
-// src/components/SearchDialog.tsx
-import React from "react";
-import { useState, useContext, useEffect } from "react";
-import { db, storage } from "@/firebase";
-import { AuthContext } from "@/components/FirebaseProvider";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import React, { useState, useEffect } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "@/firebase";
 import { auth } from "@/firebase";
-import { supabase } from "@/supabaseClient";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
+
 interface CreateUpdateDialogProps {
   open: boolean;
   onClose: () => void;
 }
-export default function CreateUpdate({open, onClose}: CreateUpdateDialogProps){
-// const : React.FC<CreateUpdateDialogProps> = ({ open, onClose }) => {
+
+export default function CreateUpdate({ open, onClose }: CreateUpdateDialogProps) {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [title, setTitle] = useState("");
+  const [nemo, setNemo] = useState("");
 
-  const [title, SetTitle] = useState('');
-  const [nemo, setNemo] = useState('');
-  const [updated_at, setUpdated_at] = useState('');
+  // open の変化に合わせてユーザー情報を同期
   useEffect(() => {
-    if(!open) return;
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log('ログイン・ユーザ', user);
-        setUser(user);
-      } else {
-        console.log('非ログインユーザー');
-        setUser(null);
-      }
-      setLoading(false);
+    if (!open) return; // ダイアログが閉じられてるときは実行しない
+
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u ?? null);
     });
+
     return () => unsubscribe();
-  }, []);
-  const hundleSubmit = async () => {
-    if (!user) return alert('ログインして');
-    if (!title) return alert('タイトルくれメンス');
+  }, [open]);
+
+  // open=false のときは何も描画しない
+  if (!open) return null;
+
+  const handleSubmit = async () => {
+    if (!user) return alert("ログインが必要です");
+    if (!title) return alert("タイトルを入力してください");
+
     try {
       await addDoc(collection(db, "update"), {
-        ownerId: user.id,
-        title: title,
-        nemo: nemo,
+        ownerId: user.uid, // ★ user.id → user.uid に修正
+        title,
+        nemo,
         createdAt: serverTimestamp(),
       });
-      return router.push('/home');
+
+      onClose();
+      router.push("/home");
     } catch (error) {
       console.error("投稿エラー:", error);
       alert("投稿中にエラーが発生しました");
     }
   };
+
   return (
-    <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
-      onClick={onClose}
-    >
-      <div
-        className="bg-[#0a0a0f] p-6 rounded-2xl shadow-xl w-80 text-white"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2 className="text-lg font-semibold mb-3">検索</h2>
-
-        <input
-          type="text"
-          placeholder="キーワードを入力"
-          className="w-full px-3 py-2 rounded bg-white/10 text-white outline-none"
-        />
-
-        <button
-          className="mt-4 w-full py-2 bg-cyan-500 rounded-lg hover:bg-cyan-600 transition"
-          onClick={onClose}
-        >
-          閉じる
-        </button>
-      </div>
+<div
+  className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-50 p-4"
+  onClick={onClose}
+>
+  <div
+    className="w-full max-w-md bg-[#0a0a0f]/90 border border-white/10 rounded-2xl p-6 shadow-xl shadow-cyan-500/10 select-none"
+    onClick={(e) => e.stopPropagation()}
+  >
+    {/* --- Header --- */}
+    <div className="flex items-center justify-between mb-4">
+      <h2 className="text-lg font-semibold text-white tracking-wide">
+        最新の更新を追加
+      </h2>
+      {/* 青い小さなドット（Replicaの更新カードと統一） */}
+      <div className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_6px_rgba(0,140,255,0.8)]" />
     </div>
+
+    {/* --- Keyword Input --- */}
+    <input
+      type="text"
+      placeholder="タイトルを入力"
+      value={title}
+      onChange={(e)=>setTitle(e.target.value)}
+      className="
+        w-full px-4 py-3 rounded-lg bg-[#0c0c17] text-white 
+        placeholder-gray-500 border border-white/10
+        outline-none focus:border-cyan-400/50 transition
+      "
+    />
+
+    {/* --- Description Input --- */}
+    <textarea
+      placeholder="内容（オプション）"
+      rows={4}
+      value={nemo}
+      onChange={(e)=> setNemo(e.target.value)}
+      className="
+        w-full mt-3 px-4 py-3 rounded-lg bg-[#0c0c17] text-white 
+        placeholder-gray-500 border border-white/10
+        outline-none focus:border-cyan-400/50 transition resize-none
+      "
+    />
+
+    {/* --- Buttons --- */}
+    <div className="flex justify-end gap-3 mt-6">
+      <button
+        onClick={onClose}
+        className="
+          px-4 py-2 rounded-lg bg-[#0c0c17] border border-white/10 
+          text-gray-300 hover:bg-[#12121f] transition
+        "
+      >
+        閉じる
+      </button>
+
+      <button
+        onClick={handleSubmit}
+        className="
+          px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500 
+          text-black font-semibold shadow-lg shadow-cyan-500/20
+          hover:from-cyan-300 hover:to-blue-400 transition
+        "
+      >
+        投稿
+      </button>
+    </div>
+  </div>
+</div>
+
   );
 }
