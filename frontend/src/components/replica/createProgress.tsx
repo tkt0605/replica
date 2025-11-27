@@ -12,7 +12,9 @@ import {
   collection,
   serverTimestamp,
 } from "firebase/firestore";
-
+import {
+  createProgress,
+} from '@/lib/firestore';
 interface CreateProgressDialogProps {
   open: boolean;
   onClose: () => void;
@@ -57,13 +59,13 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
   };
   const hundleSubmit = async () => {
     try {
-      await addDoc(collection(db, "progress"), {
-        ownerId: user.uid,
-        title: title,
-        nemo: nemo,
-        tags,
-        createdAt: serverTimestamp(),
-      });
+      await createProgress(
+        user.uid,
+        title,
+        nemo,
+        tags
+      )
+      onClose();
       return router.push('/home');
     } catch (error) {
       console.error("投稿エラー:", error);

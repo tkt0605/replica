@@ -11,42 +11,31 @@ import { useEffect, useState } from "react";
 import { db } from "@/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import StudioCard from "@/components/StudioCard";
+import {
+    createStudio,
+    createLatestUpdate,
+    createProgress,
+    getLatestUpdates,
+    getProgress,
+    getStudios,
+    updateStudio,
+    deleteProgress,
+    deleteStudio,
+    deleteUpdates,
+    LatestUpdate,
+    Progress,
+    Studios
+} from '@/lib/firestore';
 export default function Studio() {
     const router = useRouter();
-    // const categories = ["すべて", "💻WEBアプリ", "📱iOSアプリ"];
     const [selectedCategory, SetselectedCategory] = useState("すべて");
-    const [studios, setStudios] = useState<any[]>([]);
-    const categories = ["All", "iOS", "Web", "Concept"];
-    // const [selectedCategory, setSelectedCategory] = useState("All");
-    // const studios = []; // テスト用: 空配列ならエンプティステート、データがあればグリッド表示
-
-    // フィルタリングロジック（仮）
-    // const filteringCategory = studios;
-    // 初期読み込み時に localStorage の値を参照
-    useEffect(() => {
-        const hash = decodeURIComponent(window.location.hash.replace('#', ''));
-        if (categories.includes(hash)) {
-            SetselectedCategory(hash);
-        }
-    }, []);
-    const handleCategoryClick = (category: string) => {
-        SetselectedCategory(category);
-        window.location.hash = category;
-    };
-    const filteringCategory =
-        selectedCategory === 'すべて'
-            ? studios
-            : studios.filter((s) => s.category === selectedCategory);
-
+    const [studios, setStudios] = useState<Studios[]>([]);
 
     useEffect(() => {
-        const fetchStudios = async () => {
-            const snap = await getDocs(
-                query(collection(db, "studios"), orderBy("createdAt", "desc"))
-            );
-            setStudios(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-        };
-        fetchStudios();
+        (async() => {
+            const data = await getStudios();
+            setStudios(data);
+        })();
     }, []);
     return (
         <MainShell>
@@ -67,9 +56,7 @@ export default function Studio() {
                                 すべてのプロジェクトと実験室。
                             </p>
                         </div>
-
-                        {/* --- Category Filter (Apple Style Segmented Control) --- */}
-                        <div className="flex items-center gap-2 mb-12 overflow-x-auto pb-2 no-scrollbar">
+                        {/* <div className="flex items-center gap-2 mb-12 overflow-x-auto pb-2 no-scrollbar">
                             {categories.map((item, i) => {
                                 const isActive = selectedCategory === item;
                                 return (
@@ -88,7 +75,7 @@ export default function Studio() {
                                     </button>
                                 );
                             })}
-                        </div>
+                        </div> */}
 
                         {/* --- Empty State (macOS Style) --- */}
                         {studios?.length === 0 && (
@@ -122,7 +109,7 @@ export default function Studio() {
                         {/* --- Grid List (Pro Cards) --- */}
                         {studios?.length > 0 && (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-                                {filteringCategory.map((studio) => (
+                                {studios.map((studio) => (
                                     <motion.div
                                         key={studio.id}
                                         initial={{ opacity: 0 }}

@@ -4,7 +4,18 @@ import { db } from "@/firebase";
 import { auth } from "@/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
-
+import {
+  createStudio,
+  createLatestUpdate,
+  createProgress,
+  getLatestUpdates,
+  getProgress,
+  getStudios,
+  updateStudio,
+  deleteProgress,
+  deleteStudio,
+  deleteUpdates,
+} from '@/lib/firestore';
 interface CreateUpdateDialogProps {
   open: boolean;
   onClose: () => void;
@@ -35,13 +46,11 @@ export default function CreateUpdate({ open, onClose }: CreateUpdateDialogProps)
     if (!title) return alert("タイトルを入力してください");
 
     try {
-      await addDoc(collection(db, "update"), {
-        ownerId: user.uid, // ★ user.id → user.uid に修正
+      await createLatestUpdate(
+        user?.uid,
         title,
-        nemo,
-        createdAt: serverTimestamp(),
-      });
-
+        nemo
+      );
       onClose();
       router.push("/home");
     } catch (error) {

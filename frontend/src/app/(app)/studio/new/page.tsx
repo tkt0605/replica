@@ -17,6 +17,18 @@ import {
     uploadBytes,
     getDownloadURL,
 } from "firebase/storage";
+import {
+  createStudio,
+  createLatestUpdate,
+  createProgress,
+  getLatestUpdates,
+  getProgress,
+  getStudios,
+  updateStudio,
+  deleteProgress,
+  deleteStudio,
+  deleteUpdates,
+} from '@/lib/firestore';
 export default function NewStudioPage() {
     const [user, setUser] = useState<any>(null);
     const [activeTab, setActiveTab] = useState<"form" | "preview">("form");
@@ -67,20 +79,6 @@ export default function NewStudioPage() {
             .getPublicUrl(filePath);
 
         return urlData.publicUrl;
-
-        // const FileName = `${Date.now()}-${sanitize(file.name)}`;
-        // const filePath = `${userId}/${FileName}`
-        // const { data, error } = await supabase.storage.from('studio').upload(filePath, file, {
-        //     upsert: true
-        // });
-        // if (error) {
-        //     console.error('アップロードに失敗しました。');
-        //     throw error;
-        // }
-        // const {
-        //     data: { publicUrl },
-        // } = supabase.storage.from("studio").getPublicUrl(filePath);
-        // return publicUrl;
     };
     const ToogleTags = (tag: string) => {
         if (tags.includes(tag)) {
@@ -99,22 +97,16 @@ export default function NewStudioPage() {
         try {
             // 画像アップロード
             if (image) {
-                // const fileRef = ref(storage, `studio/${user.uid}/${image.name}`);
-                // await uploadBytes(fileRef, image);
                 imageURL = await uploadStudioImages(image, user.uid);
             }
-
-            // Firestore へ投稿
-            await addDoc(collection(db, "studios"), {
-                ownerId: user.uid,
-                title: title,
-                description: desc,
-                url: url || "",  // ← URLを追加（空なら空文字）
+            await createStudio(
+                user.id,
+                title,
+                desc,
+                url || "",
                 tags,
-                imageURL: imageURL,
-                createdAt: serverTimestamp(),
-            });
-
+                imageURL
+            )
             router.push("/home");
 
         } catch (error) {

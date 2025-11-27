@@ -61,7 +61,7 @@ export function Header() {
                 <div className="max-w-9xl mx-auto h-full px-6 flex items-center gap-3">
                     <div className="flex items-center justify-between " >
                         <span className="md:hidden text-2xl font-bold tracking-tighter text-white">
-                            Replica
+                            Replica.
                         </span>
                         <div className="md:hidden">
                             <button onClick={SidebarAction()} className="text-gray-700 hover:text-white rounded-xl hover:bg-white/10 p-2 duration-300">
@@ -97,7 +97,7 @@ export function Header() {
                                     <div className="text-xs text-slate-400 mb-0.5">
                                         サインイン中
                                     </div>
-                                    <div className="font-medium truncate">{user?.displayName}</div>
+                                    <div className="font-medium truncate">{user?.email}</div>
                                 </div>
                                 <div className="my-2 h-px bg-white/5" />
                                 <button onClick={logout} className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-white/5 text-red-300">
@@ -108,7 +108,7 @@ export function Header() {
                     </div>
                 </div>
             </header>
-            <Dialogs open={openSearch} onClose={() => setOpenSearch(false)} title="検索"></Dialogs>
+            {/* <Dialogs open={openSearch} onClose= {() => setOpenSearch(false)} title="検索"></Dialogs> */}
         </div>
     );
 }
