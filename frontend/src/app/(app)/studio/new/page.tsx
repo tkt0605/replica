@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useContext, useEffect } from "react";
-import { db, storage } from "@/firebase";
+import { db, storage } from "@/lib/firebase";
 import { AuthContext } from "@/components/FirebaseProvider";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { supabase } from "@/supabaseClient";
 import {
     addDoc,

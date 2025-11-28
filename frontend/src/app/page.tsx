@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useEffect, useState, useContext } from "react";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 export default function HomePage() {
   const router = useRouter();
   // Auth（簡易）

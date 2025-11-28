@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Sidebar } from "@/components/replica/SideBar";
 import { Header } from "@/components/replica/Header";
 import {MobileSidebar} from "@/components/replica/MobileSidebar";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { Preahvihear } from "next/font/google";
 import nextAppLoader from "next/dist/build/webpack/loaders/next-app-loader";

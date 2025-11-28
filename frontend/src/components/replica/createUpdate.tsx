@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebase";
-import { auth } from "@/firebase";
+import { db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import {

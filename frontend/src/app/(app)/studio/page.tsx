@@ -8,7 +8,7 @@ import { Plus, FolderOpen, ArrowRight, LayoutGrid } from 'lucide-react';
 import { motion } from "framer-motion";
 // import { AvatarViewer } from "@/components/avatar/Avatarviewer";
 import { useEffect, useState } from "react";
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import StudioCard from "@/components/StudioCard";
 import {
