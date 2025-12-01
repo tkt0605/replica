@@ -70,7 +70,7 @@ export default function Home() {
                     {/* --- 1. Dashboard Header (巨大なタイポグラフィ) --- */}
                     <section className="space-y-6">
                         <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-white">
-                            Replica. - レプリカ
+                            Replica - レプリカ
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-400 max-w-3xl leading-relaxed font-medium">
                             新しいオリジナル。<br />
@@ -210,7 +210,7 @@ export default function Home() {
 
                     {/* --- 4. Quick Links (Glass Footer) --- */}
                     <section className="pt-10 pb-20">
-                        <h3 className="text-sm uppercase tracking-widest text-gray-500 mb-6 font-bold">Menu</h3>
+                        <h3 className="text-sm uppercase tracking-widest text-gray-500 mb-6 font-bold">メニュー</h3>
 
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <a href="/studio" className={`${cardStyle} flex flex-col justify-center items-center text-center py-10`}>

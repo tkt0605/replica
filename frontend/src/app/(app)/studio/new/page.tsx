@@ -6,7 +6,7 @@ import { AuthContext } from "@/components/FirebaseProvider";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { supabase } from "@/supabaseClient";
+import { supabase } from "@/utils/supabase/client";
 import {
     addDoc,
     collection,
@@ -18,16 +18,16 @@ import {
     getDownloadURL,
 } from "firebase/storage";
 import {
-  createStudio,
-  createLatestUpdate,
-  createProgress,
-  getLatestUpdates,
-  getProgress,
-  getStudios,
-  updateStudio,
-  deleteProgress,
-  deleteStudio,
-  deleteUpdates,
+    createStudio,
+    createLatestUpdate,
+    createProgress,
+    getLatestUpdates,
+    getProgress,
+    getStudios,
+    updateStudio,
+    deleteProgress,
+    deleteStudio,
+    deleteUpdates,
 } from '@/lib/firestore';
 export default function NewStudioPage() {
     const [user, setUser] = useState<any>(null);
@@ -62,15 +62,14 @@ export default function NewStudioPage() {
         return () => unsubscribe();
     }, []);
     const sanitize = (name: string) => name.replace(/[^a-zA-Z0-9._-]/g, "");
-    async function uploadStudioImages(file: File, userId: String) {
+
+    async function uploadStudioImages(file: File, userUid: string) {
         const fileName = `${Date.now()}-${sanitize(file.name)}`;
-        const filePath = `${userId}/${fileName}`; // ここ重要 studio を付けない
+        const filePath = `${userUid}/${fileName}`;
 
         const { data, error } = await supabase.storage
-            .from("studio") // ← bucket 名
-            .upload(filePath, file, {
-                upsert: true,
-            });
+            .from("studio")
+            .upload(filePath, file, { upsert: true });
 
         if (error) throw error;
 
@@ -80,6 +79,7 @@ export default function NewStudioPage() {
 
         return urlData.publicUrl;
     };
+
     const ToogleTags = (tag: string) => {
         if (tags.includes(tag)) {
             settag(tags.filter((t) => t !== tag));
@@ -100,7 +100,7 @@ export default function NewStudioPage() {
                 imageURL = await uploadStudioImages(image, user.uid);
             }
             await createStudio(
-                user.id,
+                user.uid,
                 title,
                 desc,
                 url || "",
@@ -227,7 +227,7 @@ export default function NewStudioPage() {
                                 target="_blank"
                                 className="block mt-4 text-cyan-400 hover:underline text-sm"
                             >
-                                🔗 {url}
+                                🔗{url}
                             </a>
                         )}
                     </div>
@@ -249,6 +249,7 @@ export default function NewStudioPage() {
                     <input
                         className="w-full mt-1 p-3 rounded-lg bg-[#0c0c0e]/70 border border-white/10
                             focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/30 transition"
+                        value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="例：Replica Identity Layer / Studio Design"
                     />
@@ -259,6 +260,7 @@ export default function NewStudioPage() {
                         className="w-full mt-1 p-3 rounded-lg bg-[#0c0c0e]/70 border border-white/10
                             focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 transition"
                         rows={5}
+                        value={desc}
                         onChange={(e) => setDesc(e.target.value)}
                         placeholder="作品説明を入力してください"
                     />
@@ -281,6 +283,7 @@ export default function NewStudioPage() {
                     <input
                         className="w-full mt-1 p-3 rounded-lg bg-[#0c0c0e]/70 border border-white/10
                             focus:border-blue-400 focus:ring-2 focus:ring-blue-400/30 transition"
+                        value={url}
                         onChange={(e) => setUrl(e.target.value)}
                         placeholder="https://github.com/your-project"
                     />

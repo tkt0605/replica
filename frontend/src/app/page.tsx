@@ -166,8 +166,8 @@ export default function HomePage() {
                 </svg>
               </button>
             ) : (
-              <button className="bg-white text-black px-3 py-1 rounded-full text-xs hover:bg-gray-200 transition-colors">
-                Sign In
+              <button onClick={() => router.push('/auth/login')} className="bg-white text-black px-3 py-1 rounded-full text-xs hover:bg-gray-200 transition-colors">
+                サインイン
               </button>
             )}
           </div>
