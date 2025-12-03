@@ -40,9 +40,6 @@ export default function Login() {
       <div className="flex ">
         <div className="h-12 w-12 rounded-4xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" />
       </div>
-      {/* ロゴ or タイトル */}
-
-      {/* フォームコンテナ */}
       <div className="w-full max-w-sm rounded-2xl p-6 backdrop-blur-xl shadow-xl">
         <div className="mt-10 text-center">
             <h2 className="text-2xl font-extrabold bg-clip-text text-white">

@@ -1,12 +1,15 @@
 "use client";
-
 import { useState, useContext, useEffect } from "react";
 import { db, storage } from "@/lib/firebase";
 import { AuthContext } from "@/components/FirebaseProvider";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
+<<<<<<< HEAD
 import { auth } from "@/lib/firebase";
 import { supabase } from "@/utils/supabase/client";
+=======
+import { auth } from "@/firebase";
+>>>>>>> 7487b29 (cloudflareR2とFirebaseAuth認証の統合の心境中)
 import {
     addDoc,
     collection,
@@ -29,6 +32,7 @@ import {
     deleteStudio,
     deleteUpdates,
 } from '@/lib/firestore';
+import { getAuth } from "firebase/auth";
 export default function NewStudioPage() {
     const [user, setUser] = useState<any>(null);
     const [activeTab, setActiveTab] = useState<"form" | "preview">("form");
@@ -38,7 +42,7 @@ export default function NewStudioPage() {
     const [url, setUrl] = useState("");
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
-    const [image, setImage] = useState<File | null>(null);
+    const [file, setfile] = useState<File | null>(null);
     const availableTags = [
         "アカウント",
         "WEBアプリ",
@@ -48,6 +52,7 @@ export default function NewStudioPage() {
         "ブロックチェーン",
         "ゲーム開発",
     ];
+    const [uploading, setUploading] = useState(false);
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -62,24 +67,24 @@ export default function NewStudioPage() {
         return () => unsubscribe();
     }, []);
     const sanitize = (name: string) => name.replace(/[^a-zA-Z0-9._-]/g, "");
+    // async function uploadStudioImages(file: File, userId: String) {
+    //     const fileName = `${Date.now()}-${sanitize(file.name)}`;
+    //     const filePath = `${userId}/${fileName}`; // ここ重要 studio を付けない
 
-    async function uploadStudioImages(file: File, userUid: string) {
-        const fileName = `${Date.now()}-${sanitize(file.name)}`;
-        const filePath = `${userUid}/${fileName}`;
+    //     const { data, error } = await supabase.storage
+    //         .from("studio") // ← bucket 名
+    //         .upload(filePath, file, {
+    //             upsert: true,
+    //         });
+    //     if (error) throw error;
 
-        const { data, error } = await supabase.storage
-            .from("studio")
-            .upload(filePath, file, { upsert: true });
+    //     const { data: urlData } = supabase.storage
+    //         .from("studio")
+    //         .getPublicUrl(filePath);
 
-        if (error) throw error;
 
-        const { data: urlData } = supabase.storage
-            .from("studio")
-            .getPublicUrl(filePath);
-
-        return urlData.publicUrl;
-    };
-
+    //     return urlData.publicUrl;
+    // };
     const ToogleTags = (tag: string) => {
         if (tags.includes(tag)) {
             settag(tags.filter((t) => t !== tag));
@@ -87,34 +92,84 @@ export default function NewStudioPage() {
             settag([...tags, tag]);
         }
     };
+    // const handleSubmit = async () => {
+    //     if (!user) return alert("ログインが必要です");
+
+    //     if (!title.trim()) return alert("タイトルを入力してください");
+
+    //     let FileURL = "";
+
+    //     try {
+    //         // 画像アップロード
+    //         if (file) {
+    //             FileURL = await uploadStudioImages(file, user.uid);
+    //         }
+    //         await createStudio(
+    //             user.id,
+    //             title,
+    //             desc,
+    //             url || "",
+    //             tags,
+    //             FileURL
+    //         )
+    //         router.push("/home");
+
+    //     } catch (error) {
+    //         console.error("投稿エラー:", error);
+    //         alert("投稿中にエラーが発生しました");
+    //     }
+    // };
+    //clouadFlare R2
+
+    async function uploadToR2(file: File) {
+        if (!file) return;
+        setUploading(true);
+        const auth = getAuth();
+        const token = await auth.currentUser?.getIdToken();
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch(process.env.NEXT_PUBLIC_UPLOAD_ENDPOINT!, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
+        if (!res.ok) {
+            console.error(await res.text());
+            throw new Error("Cloudflare R2 アップロード失敗");
+        }
+        return await res.json();
+    };
     const handleSubmit = async () => {
         if (!user) return alert("ログインが必要です");
-
         if (!title.trim()) return alert("タイトルを入力してください");
 
-        let imageURL = "";
+        let coverUrl = "";
 
         try {
-            // 画像アップロード
-            if (image) {
-                imageURL = await uploadStudioImages(image, user.uid);
+            if (file) {
+                // 🔥 R2 にアップロード
+                const result = await uploadToR2(file);
+                coverUrl = result.url;   // Worker のURL
             }
+
+            // 投稿を保存
             await createStudio(
                 user.uid,
                 title,
                 desc,
                 url || "",
                 tags,
-                imageURL
-            )
-            router.push("/home");
+                coverUrl
+            );
 
+            router.push("/home");
         } catch (error) {
             console.error("投稿エラー:", error);
             alert("投稿中にエラーが発生しました");
         }
     };
-
 
     return (
         <main className="min-h-screen py-14 px-6 bg-[#050510] text-white relative overflow-hidden">
@@ -187,9 +242,9 @@ export default function NewStudioPage() {
 
                         {/* カバー */}
                         <button className="w-full h-48 rounded-lg bg-black/30 border border-white/10 overflow-hidden flex items-center justify-center">
-                            {image ? (
+                            {file ? (
                                 <img
-                                    src={URL.createObjectURL(image)}
+                                    src={URL.createObjectURL(file)}
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
@@ -294,7 +349,7 @@ export default function NewStudioPage() {
                         type="file"
                         className="mt-2 text-sm file:bg-cyan-600 file:px-4 file:py-2 file:border-none 
                             file:rounded-md file:text-white hover:file:bg-cyan-500 transition"
-                        onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+                        onChange={(e) => setfile(e.target.files?.[0] ?? null)}
                     />
 
                     {/* ボタン */}

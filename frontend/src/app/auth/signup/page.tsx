@@ -48,7 +48,7 @@ export default function Signup() {
                         <input
                             type="email"
                             value={email}
-                            onChange={(e) => e.target.value}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-500/50 outline-none"
                             placeholder="メールアドレス"
                         />
@@ -57,7 +57,7 @@ export default function Signup() {
                         <input
                             type="password"
                             value={password}
-                            onChange={(e) => e.target.value}
+                            onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-purple-500/50 outline-none"
                             placeholder="パスワード"
                         />

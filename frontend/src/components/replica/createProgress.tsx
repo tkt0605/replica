@@ -6,7 +6,6 @@ import { AuthContext } from "@/components/FirebaseProvider";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { supabase } from "@/supabaseClient";
 import {
   addDoc,
   collection,
