@@ -15,7 +15,7 @@ export const SignInWithGoogle = () => {
       console.log("Google ログイン成功:", result.user);
 
       // ログイン成功後の遷移
-      router.push("/dashboard");
+      router.push("/home");
     } catch (error: any) {
       console.error("Google ログイン失敗:", error);
       alert("Google ログインでエラーが発生しました");
