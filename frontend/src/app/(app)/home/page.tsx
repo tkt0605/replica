@@ -88,12 +88,15 @@ export default function Home() {
                                 <Activity className="w-5 h-5 text-gray-500" />
                                 最新の更新
                             </h2>
-                            <button
-                                onClick={() => setOpenUpdated(true)}
-                                className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1"
-                            >
-                                <Plus className="w-4 h-4" /> Add New
-                            </button>
+                            { user?.email == "takatokomada17@gmail.com"  && (
+                                                            <button 
+                                
+                                                            onClick={() => setOpenUpdated(true)}
+                                                            className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1"
+                                                        >
+                                                            <Plus className="w-4 h-4" /> Add New
+                                                        </button>
+                            )}
                         </div>
                         {updates?.length === 0 && (
                             <div className="w-full flex flex-col items-start py-8 text-left">
@@ -148,12 +151,14 @@ export default function Home() {
                                 <Layers className="w-5 h-5 text-gray-500" />
                                 進行中
                             </h2>
-                            <button
-                                onClick={() => setOpenProgress(true)}
-                                className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1"
-                            >
-                                <Plus className="w-4 h-4" /> Add Project
-                            </button>
+                            {user?.email == "takatokomada17@gmail.com" && (
+                                                            <button
+                                                                onClick={() => setOpenProgress(true)}
+                                                                className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1"
+                                                            >
+                                                                <Plus className="w-4 h-4" /> Add Project
+                                                            </button>
+                            )}
                         </div>
                         {progress?.length === 0 && (
                             <div className="w-full flex flex-col items-start py-8 text-left">

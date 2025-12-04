@@ -57,7 +57,7 @@ export function Header() {
     // cursor-pointer select-none   
     return (
         <div>
-            <header className="fixed top-0 md:left-60 sm:left-0 inset-x-0 h-14  bg-[#050510] backdrop-blur z-30">
+            <header className=" fixed top-0 md:left-60 sm:left-0 inset-x-0 h-14  bg-[#050510] backdrop-blur z-30">
                 <div className="max-w-9xl mx-auto h-full px-6 flex items-center gap-3">
                     <div className="flex items-center justify-between " >
                         <span className="md:hidden text-2xl font-bold tracking-tighter text-white">
@@ -92,15 +92,25 @@ export function Header() {
                             }
                         </div>
                         {open && (
-                            <div className="absolute right-0 mt-40 w-56 rounded-xl border border-white/10  bg-[#0b0b14]/95 backdrop-blur p-3 text-sm shadow-xl">
+                            <div className="absolute right-0 mt-40 w-56 rounded-xl border border-white/10  
+    bg-[#0b0b14]/95 backdrop-blur p-3 text-sm shadow-xl 
+    z-[9999] overflow-visible">
+
                                 <div className="mb-2">
                                     <div className="text-xs text-slate-400 mb-0.5">
                                         サインイン中
                                     </div>
-                                    <div className="font-medium truncate">{user?.email}</div>
+                                    <div className="font-medium truncate text-white">
+                                        {user?.email ?? "No email"}
+                                    </div>
                                 </div>
+
                                 <div className="my-2 h-px bg-white/5" />
-                                <button onClick={logout} className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-white/5 text-red-300">
+
+                                <button
+                                    onClick={logout}
+                                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-white/5 text-red-300"
+                                >
                                     ログアウト
                                 </button>
                             </div>
