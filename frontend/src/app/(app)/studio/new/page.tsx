@@ -4,12 +4,7 @@ import { db, storage } from "@/lib/firebase";
 import { AuthContext } from "@/components/FirebaseProvider";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
-<<<<<<< HEAD
 import { auth } from "@/lib/firebase";
-import { supabase } from "@/utils/supabase/client";
-=======
-import { auth } from "@/firebase";
->>>>>>> 7487b29 (cloudflareR2とFirebaseAuth認証の統合の心境中)
 import {
     addDoc,
     collection,
@@ -126,6 +121,7 @@ export default function NewStudioPage() {
         setUploading(true);
         const auth = getAuth();
         const token = await auth.currentUser?.getIdToken();
+        console.log('検出したトークン', token);
         const formData = new FormData();
         formData.append('file', file);
         const res = await fetch(process.env.NEXT_PUBLIC_UPLOAD_ENDPOINT!, {

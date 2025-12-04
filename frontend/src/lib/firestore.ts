@@ -18,7 +18,7 @@ export type Studios = {
   ownerId: string;
   title: string;
   description: string;
-  url: string;
+  
   tags: string[];
   imageURL: string;
   createdAt: string; // ISO文字列

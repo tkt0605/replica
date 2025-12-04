@@ -121,7 +121,8 @@ export default function Studio() {
                                             <div className="w-full aspect-video rounded-2xl bg-gradient-to-br from-[#2c2c2e] to-[#1c1c1e] mb-6 overflow-hidden border border-white/[0.05]">
                                                 {/* studio.image があれば <img src={...} /> */}
                                                 <div className="w-full h-full flex items-center justify-center text-[#3a3a3c]">
-                                                    <LayoutGrid className="w-8 h-8 opacity-20" />
+                                                    {/* <LayoutGrid className="w-8 h-8 opacity-20" /> */}
+                                                <img src={studio.imageURL}  alt={studio.title} className="w-full h-full object-cover" />
                                                 </div>
                                             </div>
 
@@ -133,7 +134,7 @@ export default function Studio() {
                                             </p>
                                         </div>
 
-                                        <div className="mt-6 flex items-center text-sm font-medium text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
+                                        <div onClick={() => router.push(`/studio/${studio.id}`)} className="mt-6 flex items-center text-sm font-medium text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
                                             詳細を見る <ArrowRight className="w-4 h-4 ml-1" />
                                         </div>
                                     </motion.div>

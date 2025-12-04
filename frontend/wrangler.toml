@@ -1,12 +1,10 @@
 name = "replica-upload-api"
 main = "src/index.ts"
-
-# R2バケットの接続設定
+compatibility_date = "2025-12-03"
 [[r2_buckets]]
-r2_buckets = [
-  { binding = "BUCKET", bucket_name = "replica-studio" }
-]
-# 環境変数（公開しても大丈夫なもの）
+binding = "BUCKET"
+bucket_name = "replica-studio"
+
+# 環境変数
 [vars]
-PUBLIC_URL = "https://419fee1d93cb0f021ccd3376e3d35380.r2.dev"
-FIREBASE_API_KEY="AIzaSyAGiUqmYAlufKyOLnjG97UJsm9d-egcy0c"
+PUBLIC_URL = "https://pub-281c2c3269ed42ebb12a315a950dc16c.r2.dev"
