@@ -34,7 +34,7 @@ export default function NewStudioPage() {
     const [loading, isLoading] = useState(true);
     const [tags, settag] = useState<string[]>([]);
     const router = useRouter();
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState<string>("");
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
     const [file, setfile] = useState<File | null>(null);
@@ -48,6 +48,9 @@ export default function NewStudioPage() {
         "ゲーム開発",
     ];
     const [uploading, setUploading] = useState(false);
+    interface UploadResult{
+        url: string;
+    }
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -135,7 +138,7 @@ export default function NewStudioPage() {
             console.error(await res.text());
             throw new Error("Cloudflare R2 アップロード失敗");
         }
-        return await res.json();
+        return await res.json() as UploadResult;
     };
     const handleSubmit = async () => {
         if (!user) return alert("ログインが必要です");
@@ -147,7 +150,10 @@ export default function NewStudioPage() {
             if (file) {
                 // 🔥 R2 にアップロード
                 const result = await uploadToR2(file);
-                coverUrl = result.url;   // Worker のURL
+                // Worker のURL
+                if (result) {
+                    coverUrl = result.url;
+                }
             }
 
             // 投稿を保存
