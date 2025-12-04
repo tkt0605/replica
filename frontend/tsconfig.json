@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": [
+      "@cloudflare/workers-types",
+      "node" // もしnodeの型も使っている場合は残す
+    ],
     "plugins": [
       {
         "name": "next"
