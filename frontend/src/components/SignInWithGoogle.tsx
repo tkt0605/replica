@@ -1,27 +1,24 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../lib/firebase";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
 export const SignInWithGoogle = () => {
-  const supabase = createClient();
+  // const supabase = createClient();
   const router = useRouter();
+  const provider = new GoogleAuthProvider();
+
   const handleGoogleLogin = async () => {
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${location.origin}/auth/callback`,
-        },
-      });
-      if (error){
-        console.error('ログイン失敗：', error);
-        console.error(error.message);
-        return;
-      }
-      console.log('Googleでログイン成功：', data);
+      // Google ログイン
+      const result = await signInWithPopup(auth, provider);
+
+      console.log("Google ログイン成功:", result.user);
+
+      // ログイン成功後の遷移
+      router.push("/dashboard");
     } catch (error: any) {
-      console.error('ログイン失敗：', error)
-      alert('Google ログインの実行中にエラーが発生しました')
+      console.error("Google ログイン失敗:", error);
+      alert("Google ログインでエラーが発生しました");
     }
   };
 

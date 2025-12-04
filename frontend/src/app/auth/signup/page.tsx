@@ -1,35 +1,37 @@
 "use client"
 import { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
 
 export default function Signup() {
-    const supabase = createClient();
+    // const supabase = createClient();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [error, setError] = useState<string>("");
     const router = useRouter();
 
-    const handleSignUp = async () => {
+    const handleSignUp = async (email: string, password: string) => {
         setError("");
-
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-
-        if (error) {
-            console.error("signup error:", error.message);
-            setError(error.message);
-            return;
+    
+        try {
+          // ユーザーアカウント作成
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+    
+          // メール確認を送信
+          await sendEmailVerification(user);
+    
+          alert("確認メールを送信しました！メールをご確認ください。");
+          console.log("アカウント作成成功:", user.uid);
+    
+          // ログインページへ
+          router.push("/auth/login");
+        } catch (err: any) {
+          console.error("Signup Error:", err);
+          setError(err.message || "サインアップに失敗しました。");
         }
-
-        // Supabase のメール認証が ON なら確認メールが届く
-        alert("確認メールを送信しました！メールをご確認ください。");
-        console.log("アカウント作成成功：", data);
-        router.push("/auth/login");
     };
     return (
         <main className="min-h-screen flex flex-col items-center justify-center bg-[#050510] text-slate-100 px-4">
@@ -63,7 +65,7 @@ export default function Signup() {
                         />
                     </div>
                     <button
-                        onClick={handleSignUp}
+                        onClick={() => handleSignUp}
                         className="w-full py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg shadow-cyan-500/20"
                     >
                         続ける

@@ -4,37 +4,37 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { SignInWithGoogle } from "@/components/SignInWithGoogle";
-import { createClient } from "@/utils/supabase/client";
+// import { createClient } from "@/utils/supabase/client";
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const router = useRouter();
-  const supabase = createClient();
-  // const handleLogin = async () => {
-  //   try {
-  //     await signInWithEmailAndPassword(auth, email, password);
-  //     console.log("ログイン成功！");
-  //     return router.push('/home');
-  //   } catch (err: any) {
-  //     setError(err.message);
-  //     return router.push('/auth/login');
-  //   }
-  // };
-  const handleLogin = async()=>{
-    setError('');
-    const {data, error} = await supabase.auth.signInWithPassword({
-      email, 
-      password,
-    });
-    if (error){
-      console.error('ログイン失敗：', error.message);
-      setError(error.message);
-      return;
+  // const supabase = createClient();
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("ログイン成功！");
+      return router.push('/home');
+    } catch (err: any) {
+      setError(err.message);
+      return router.push('/auth/login');
     }
-    console.log('ログイン成功：', data);
-    return router.push('/home');
   };
+  // const handleLogin = async()=>{
+  //   setError('');
+  //   const {data, error} = await supabase.auth.signInWithPassword({
+  //     email, 
+  //     password,
+  //   });
+  //   if (error){
+  //     console.error('ログイン失敗：', error.message);
+  //     setError(error.message);
+  //     return;
+  //   }
+  //   console.log('ログイン成功：', data);
+  //   return router.push('/home');
+  // };
   return (
     <main className="min-h-screen flex flex-col items-center justify-center  bg-[#050510] text-slate-100 px-4">
       <div className="flex ">
