@@ -149,7 +149,7 @@ export default function Home() {
                         <div className="flex items-center justify-between border-b border-white/10 pb-4">
                             <h2 className="text-2xl font-semibold tracking-tight text-white flex items-center gap-2">
                                 <Layers className="w-5 h-5 text-gray-500" />
-                                進行中
+                                進行中のプロジェクト
                             </h2>
                             {user?.email == "takatokomada17@gmail.com" && (
                                                             <button

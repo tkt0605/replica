@@ -38,45 +38,48 @@ export default function Login() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center  bg-[#050510] text-slate-100 px-4">
       <div className="flex ">
-        <div className="h-12 w-12 rounded-4xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" />
+        {/* <div className="h-12 w-12 rounded-4xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" /> */}
+        <span className="text-4xl font-extrabold bg-clip-text text-white">
+          Replica.
+        </span>
       </div>
       <div className="w-full max-w-sm rounded-2xl p-6 backdrop-blur-xl shadow-xl">
         <div className="mt-10 text-center">
-            <h2 className="text-2xl font-extrabold bg-clip-text text-white">
-                おかえりなさい
-            </h2>
+          <h2 className="text-2xl font-extrabold bg-clip-text text-white">
+            おかえりなさい
+          </h2>
         </div>
         {/* メール */}
         <div className="p-4">
           <div className="mb-4">
             <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-500/50 outline-none"
-                placeholder="メールアドレス"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-cyan-500/50 outline-none"
+              placeholder="メールアドレス"
             />
-            </div>
-            <div className="mb-6">
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-purple-500/50 outline-none"
-                    placeholder="パスワード"
-                />
-            </div>
-            <button onClick={handleLogin} className="w-full py-2.5 rounded-xl font-semibold text-sm  bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg shadow-cyan-500/20">
-                ログイン
-            </button>
-            <div className="mt-4 text-center text-[11px] text-slate-100">
-                アカウントをお持ちではないですか。{" "}
-                <a href="/auth/signup" className="text-cyan-400 underline hover:text-cyan-300 cursor-pointer">
-                    サインアップ
-                </a>
-            </div>
-            <SignInWithGoogle />
-            {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
+          </div>
+          <div className="mb-6">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-6 py-3 rounded-xl bg-black/30 border border-white/10 text-sm text-slate-100 focus:ring-2 focus:ring-purple-500/50 outline-none"
+              placeholder="パスワード"
+            />
+          </div>
+          <button onClick={handleLogin} className="w-full py-2.5 rounded-xl font-semibold text-black text-sm bg-white hover:bg-gray-300 transition shadow-lg shadow-gray-500">
+            ログイン
+          </button>
+          <div className="mt-4 text-center text-[11px] text-slate-100">
+            アカウントをお持ちではないですか。{" "}
+            <a href="/auth/signup" className="text-cyan-400 underline hover:text-cyan-300 cursor-pointer">
+              サインアップ
+            </a>
+          </div>
+          <SignInWithGoogle />
+          {error && <p className="text-red-400 text-sm mt-3">{error}</p>}
         </div>
       </div>
     </main>

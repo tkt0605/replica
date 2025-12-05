@@ -97,11 +97,11 @@ export default function HomePage() {
           className="max-w-2xl text-xl md:text-3xl font-medium leading-tight text-[#86868b]"
         >
           <p>
-            <span className="text-[#f5f5f7]">My Vision.</span> Your Experience.
+            <span className="text-[#f5f5f7]">ビジョンと</span>体験.
           </p>
           <p className="mt-4 text-lg md:text-xl font-normal text-[#86868b] max-w-lg mx-auto leading-relaxed">
-            僕が作るすべてのアプリと思想をここに。<br />
-            それは、<span className="text-[#f5f5f7]">僕だけのApp Store</span>。
+            僕が作るすべてのアプリをここに。<br />
+            ここは、<span className="text-[#f5f5f7]">僕だけのApp Store</span>。
           </p>
         </motion.div>
 
@@ -112,7 +112,7 @@ export default function HomePage() {
           // transition={{ ...transition, delay: 0.4 }}
           className="mt-12 flex items-center gap-4"
         >
-          <button onClick={()=>router.push('/home')} className="px-6 py-2.5 rounded-full bg-[#0071e3] text-white text-base font-medium hover:bg-[#0077ed] transition-colors shadow-[0_0_20px_rgba(0,113,227,0.4)]">
+          <button onClick={JampTopage} className="px-6 py-2.5 rounded-full bg-[#0071e3] text-white text-base font-medium hover:bg-[#0077ed] transition-colors shadow-[0_0_20px_rgba(0,113,227,0.4)]">
             Replicaへ。
           </button>
           <button className="px-6 py-2.5 rounded-full text-[#2997ff] text-base font-medium hover:underline flex items-center gap-1">
@@ -132,12 +132,12 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <p className="text-sm font-semibold text-[#86868b] tracking-widest uppercase mb-4">
-              The Philosophy
+              僕の哲学
             </p>
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tight text-[#f5f5f7] leading-tight">
-              0から1ではない。<br/>
+              0から1ではなく<br/>
               <span className="bg-clip-text text-transparent bg-gradient-to-br from-white to-[#86868b]">
-                1から、無限へ。
+                1から2を創る。
               </span>
             </h2>
           </motion.div>
@@ -152,7 +152,7 @@ export default function HomePage() {
             >
               <h3 className="text-2xl font-semibold text-white">Archives.</h3>
               <p className="text-[#86868b] text-lg leading-relaxed">
-                Replicaは、僕が生み出すプロトタイプ、構想、完成品、そのすべてを「作品」として記録するアーカイブです。
+                Replicaは、僕が生み出すプロトタイプ、アイデア、完成品、そのすべてを「作品」として記録するアーカイブです。
               </p>
             </motion.div>
 
@@ -165,7 +165,8 @@ export default function HomePage() {
             >
                <h3 className="text-2xl font-semibold text-white">Platform.</h3>
               <p className="text-[#86868b] text-lg leading-relaxed">
-                単なるポートフォリオではありません。ここは世界とつながる窓であり、表現のレプリカ（分身）たちが生きる場所です。
+                ようこそ。ここは、ただのポートフォリオではありません。
+                僕の作品をデジタル世界へ発信する。表現のプラットフォームです
               </p>
             </motion.div>
           </div>

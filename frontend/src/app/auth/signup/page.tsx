@@ -24,7 +24,7 @@ export default function Signup() {
           await sendEmailVerification(user);
     
           alert("確認メールを送信しました！メールをご確認ください。");
-          console.log("アカウント作成成功:", user.uid);
+        //   console.log("アカウント作成成功:", user.uid);
     
           // ログインページへ
           router.push("/auth/login");
@@ -36,7 +36,10 @@ export default function Signup() {
     return (
         <main className="min-h-screen flex flex-col items-center justify-center bg-[#050510] text-slate-100 px-4">
             <div className="flex ">
-                <div className="h-12 w-12 rounded-4xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" />
+                {/* <div className="h-12 w-12 rounded-4xl bg-gradient-to-br from-cyan-400 via-purple-400 to-pink-500 shadow-[0_0_20px_rgba(56,189,248,0.7)]" /> */}
+                <span className="text-4xl font-extrabold bg-clip-text text-white">
+                    Replica.
+                </span>
             </div>
 
             <div className="w-full max-w-sm rounded-2xl p-6 backdrop-blur-xl shadow-xl">
@@ -65,8 +68,8 @@ export default function Signup() {
                         />
                     </div>
                     <button
-                        onClick={() => handleSignUp}
-                        className="w-full py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 transition shadow-lg shadow-cyan-500/20"
+                        onClick={handleSignUp}
+                        className="w-full py-2.5 rounded-xl font-semibold text-black text-sm bg-white hover:bg-gray-300 transition shadow-lg shadow-gray-500"
                     >
                         続ける
                     </button>

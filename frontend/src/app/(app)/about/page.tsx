@@ -11,7 +11,9 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]"
+          className="text-3xl md:text-5xl font-extrabold bg-clip-text text-transparent 
+               bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 
+               drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]"
         >
           Replica について
         </motion.h1>
@@ -22,12 +24,13 @@ export default function AboutPage() {
           transition={{ delay: 0.4 }}
           className="mt-6 text-lg text-slate-300 leading-relaxed"
         >
-          Replica は、自分のデジタル世界を再定義するための
-          <span className="text-cyan-300"> 新世代のi/o</span> です。
-          AI、3D、そしてクラウド技術を融合させ、
-          自分が自分自身の「デジタル人格」と「デジタル資産」を自由に扱える未来を目指しています。
+          Replica は、あなたのデジタル生活をもっと自由にするための
+          <span className="text-cyan-300"> 新しい入り口</span> です。
+          AI やクラウド技術を組み合わせて、
+          自分の情報や作品を “自分らしく” 扱える未来をつくっています。
         </motion.p>
       </section>
+
 
       {/* --- VISION --- */}
       <section className="max-w-5xl mx-auto px-6 py-28">
@@ -35,19 +38,22 @@ export default function AboutPage() {
 
         <div className="grid md:grid-cols-2 gap-10">
           <p className="text-slate-300 leading-relaxed">
-            Replica は単なるアプリではなく、
-            <span className="text-white font-semibold">個人のデジタルレイヤー</span>を構築するプロジェクトです。
-            すべてのユーザーが自分だけの Persona を持ち、
-            アプリ・サービス・AIアシスタント・デバイスに跨って連携できる世界をつくります。
+            Replica は、ただのサイトじゃありません。
+            自分のデジタルな人生をまとめて扱える
+            <span className="text-white font-semibold">“自分専用のレイヤー”</span>
+            をつくるプロジェクトです。
+            それぞれが自分の Persona を持ち、
+            アプリ・サービス・AI・デバイスまで自然につながる世界を目指しています。
           </p>
 
           <p className="text-slate-300 leading-relaxed">
-            あなたのアイデンティティ、記録、制作物、アプリ。
-            それらが１つの「Replica OS」に集約され、
-            自分だけの世界観を拡張していけるプラットフォームへと進化します。
+            自分自身の情報、思い出、作品、アプリ。
+            そういったすべてが「Replica」にひとつにまとまり、
+            自分の世界観をそのまま広げていける場所へ進化していきます。
           </p>
         </div>
       </section>
+
 
       {/* --- CORE VALUES --- */}
       <section className="max-w-5xl mx-auto px-6 py-28">
@@ -56,17 +62,19 @@ export default function AboutPage() {
         <div className="grid md:grid-cols-3 gap-8">
           {[
             {
-              title: "自己を中心に置く",
-              text: "すべてのサービスの中心に “自分” が存在する。Persona を軸とした体験設計。",
+              title: "自分を軸に生きる",
+              text: "周りに合わせるんじゃなくて、自分らしさをそのまま使える場所にする。",
             },
             {
-              title: "自分の制作物を世界に広げる",
-              text: "自分の制作物・アプリ・アイデアが世界に広がるように設計された Studio と OS。",
+              title: "作ったものをちゃんと届ける",
+              text: "アイデアも作品も、埋もれさせない。作ったら、ちゃんと届くように。",
             },
             {
-              title: "AI × UXを最適化",
-              text: "I.R.I.S. をはじめとする AI との深い統合により、人間中心の体験へ最適化。",
+              title: "AIと一緒にアップデートする",
+              text: "AIをツールじゃなく“相棒”に。自然と毎日が少しラクになる体験をつくる。",
             },
+
+
           ].map((card, idx) => (
             <motion.div
               key={idx}
@@ -85,29 +93,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* --- ECOSYSTEM --- */}
-      {/* <section className="max-w-5xl mx-auto px-6 py-28">
-        <h2 className="text-3xl font-bold mb-10">Replicaサービス一覧</h2>
-
-        <ul className="space-y-6 text-slate-300">
-          <li>
-            <span className="text-white font-semibold">Replica Persona — </span>
-            デジタルID & 3Dアバターを管理し、アプリ全体に統合される Identity Layer。
-          </li>
-          <li>
-            <span className="text-white font-semibold">Replica Studio — </span>
-            アプリ・制作物・作品を公開し、世界に発信するクリエイター空間。
-          </li>
-          <li>
-            <span className="text-white font-semibold">I.R.I.S. — </span>
-            AI アシスタント × ダイアログOS。あなたの生活・制作・研究を支援。
-          </li>
-          <li>
-            <span className="text-white font-semibold">Replica Store — </span>
-            アプリ・サービス・AIモデルの公開プラットフォーム。
-          </li>
-        </ul>
-      </section> */}
 
       {/* --- FOUNDER NOTE --- */}
       <section className="max-w-4xl mx-auto px-6 py-28">
@@ -115,7 +100,7 @@ export default function AboutPage() {
         <p className="text-slate-300 leading-relaxed text-lg">
           Replica は、{" "}
           <span className="text-white font-semibold">
-          「もっと自由に、自分の世界を作りたい」
+            「もっと自由に、自分の世界を作りたい」
           </span>{" "}
           という気持ちから始まりました。
           技術も、デザインも、AI もすべて、
@@ -124,22 +109,22 @@ export default function AboutPage() {
         </p>
 
         <p className="mt-4 text-slate-400 italic">
-          — tkt0605（製作者 / クリエイター）
+          — tkt0605（製作者）
         </p>
       </section>
 
       {/* --- ROADMAP --- */}
       <section className="max-w-5xl mx-auto px-6 py-28">
-        <h2 className="text-3xl font-bold mb-8">Roadmap</h2>
+        <h2 className="text-3xl font-bold mb-8">ここからのロードマップ</h2>
 
         <ol className="space-y-6 text-slate-300 border-l border-white/10 pl-6">
           <li>
             <span className="text-cyan-300 font-semibold">Phase 1：</span>{" "}
-             Replica Studio・作品投稿・アプリ公開の機能
+            Replica Studio・作品投稿・アプリ公開の機能
           </li>
           <li>
-            <span className="text-cyan-300 font-semibold">Phase 2：</span>{" "}            
-             Persona(アカウント/人格)の完成
+            <span className="text-cyan-300 font-semibold">Phase 2：</span>{" "}
+            Persona(アカウント/人格)の完成
           </li>
           <li>
             <span className="text-cyan-300 font-semibold">Phase 3：</span>{" "}
@@ -154,16 +139,16 @@ export default function AboutPage() {
 
       {/* --- CONTACT --- */}
       <section className="max-w-3xl mx-auto px-6 py-24 text-center">
-        <h2 className="text-3xl font-bold mb-6">Contact</h2>
+        <h2 className="text-3xl font-bold mb-6">フィードバック</h2>
         <p className="text-slate-300">
-        ご質問やアイデアがあれば気軽にどうぞ。
-        みなさんの声が Replica を育てます。
+          ご質問やアイデアがあれば気軽にどうぞ。
+          みなさんの声が Replica を育てます。
         </p>
         <a
           href="mailto:takato.komada2005@outlook.jp"
           className="inline-block mt-4 px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 transition"
         >
-          Contact Us
+          メールを送る。
         </a>
       </section>
 
