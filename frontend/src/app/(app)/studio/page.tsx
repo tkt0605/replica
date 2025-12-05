@@ -44,11 +44,13 @@ export default function Studio() {
                 {/* Sidebarコンポーネントがある場合 */}
                 {/* <div className="hidden md:block w-64 border-r border-white/10">...</div> */}
 
-                <div className="flex flex-1 flex-col">
-                    <main className="flex-1 px-6 py-8 max-w-7xl mx-auto w-full">
-
+                {/* <div className="flex flex-1 flex-col"> */}
+                <div className="flex-1 min-h-screen flex flex-col max-w-7xl mx-auto">
+                    {/* <main className="flex-1 px-6 py-8 max-w-7xl mx-auto w-full"> */}
+                    <main className="px-6 py-12 md:py-20 space-y-20">
                         {/* --- Page Title --- */}
-                        <div className="mb-10">
+                        {/* <div className="mb-10"> */}
+                        <div className="space-y-6">
                             <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-2">
                                 Studios.
                             </h1>

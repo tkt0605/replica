@@ -11,7 +11,7 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-3xl md:text-5xl font-extrabold bg-clip-text text-transparent 
+          className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent 
                bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300 
                drop-shadow-[0_0_20px_rgba(56,189,248,0.45)]"
         >
