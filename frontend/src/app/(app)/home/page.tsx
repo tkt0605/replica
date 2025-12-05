@@ -69,7 +69,7 @@ export default function Home() {
 
                     {/* --- 1. Dashboard Header (巨大なタイポグラフィ) --- */}
                     <section className="space-y-6">
-                        <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-white">
+                        <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white">
                             Replica - レプリカ
                         </h1>
                         <p className="text-xl md:text-2xl text-gray-400 max-w-3xl leading-relaxed font-medium">
