@@ -12,7 +12,7 @@ export default function Signup() {
     const [error, setError] = useState<string>("");
     const router = useRouter();
 
-    const handleSignUp = async (email: string, password: string) => {
+    const handleSignUp = async () => {
         setError("");
     
         try {
