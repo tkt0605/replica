@@ -1,35 +1,11 @@
 "use client";
-import { useState, useContext, useEffect } from "react";
-import { db, storage } from "@/lib/firebase";
-import { AuthContext } from "@/components/FirebaseProvider";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, getAuth, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import {
-    addDoc,
-    collection,
-    serverTimestamp,
-} from "firebase/firestore";
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL,
-} from "firebase/storage";
-import {
-    createStudio,
-    createLatestUpdate,
-    createProgress,
-    getLatestUpdates,
-    getProgress,
-    getStudios,
-    updateStudio,
-    deleteProgress,
-    deleteStudio,
-    deleteUpdates,
-} from '@/lib/firestore';
-import { getAuth } from "firebase/auth";
+import { createStudio } from '@/lib/firestore';
 export default function NewStudioPage() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [activeTab, setActiveTab] = useState<"form" | "preview">("form");
     const [loading, isLoading] = useState(true);
     const [tags, settag] = useState<string[]>([]);
@@ -52,14 +28,8 @@ export default function NewStudioPage() {
         url: string;
     }
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log("ログイン中ユーザー:", user);
-                setUser(user);
-            } else {
-                console.log('非ログイン');
-                setUser(null);
-            }
+        const unsubscribe = onAuthStateChanged(auth, (u) => {
+            setUser(u ?? null);
             isLoading(false);
         });
         return () => unsubscribe();
@@ -124,7 +94,6 @@ export default function NewStudioPage() {
         setUploading(true);
         const auth = getAuth();
         const token = await auth.currentUser?.getIdToken();
-        console.log('検出したトークン', token);
         const formData = new FormData();
         formData.append('file', file);
         const res = await fetch(process.env.NEXT_PUBLIC_UPLOAD_ENDPOINT!, {
@@ -167,8 +136,7 @@ export default function NewStudioPage() {
             );
 
             router.push("/home");
-        } catch (error) {
-            console.error("投稿エラー:", error);
+        } catch {
             alert("投稿中にエラーが発生しました");
         }
     };

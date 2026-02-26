@@ -1,4 +1,4 @@
-import { initializeApp, getApps } from "firebase/app";
+import { initializeApp, getApps, FirebaseApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -13,9 +13,16 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+// apiKey が未定義の場合（SSR/ビルド時）は初期化をスキップする。
+// useEffect 内でのみ使われるため、実行時（クライアント側）では必ず定義済みになる。
+function initApp(): FirebaseApp | undefined {
+  if (!firebaseConfig.apiKey) return undefined;
+  return !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+}
 
-export const auth = getAuth(app);
+const app = initApp();
+
+export const auth = app ? getAuth(app) : null!;
 export const provider = new GoogleAuthProvider();
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+export const db = app ? getFirestore(app) : null!;
+export const storage = app ? getStorage(app) : null!;
