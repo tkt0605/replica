@@ -6,6 +6,7 @@ export const useAuth = (): User | null => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
+    if (!auth) return;
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });

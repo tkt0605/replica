@@ -1,6 +1,7 @@
 // lib/firestore.ts
 import { db } from "@/lib/firebase";
 import {
+  Firestore,
   addDoc,
   collection,
   getDocs,
@@ -10,6 +11,11 @@ import {
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
+
+function getDb(): Firestore {
+  if (!db) throw new Error("Firestore が初期化されていません。NEXT_PUBLIC_FIREBASE_* 環境変数を確認してください。");
+  return db;
+}
 
 /* ---------- フロント側で扱う型 ---------- */
 
@@ -53,7 +59,7 @@ export const createStudio = async (
   tags: string[],
   imageURL: string
 ): Promise<void> => {
-  await addDoc(collection(db, "studios"), {
+  await addDoc(collection(getDb(), "studios"), {
     ownerId,
     title,
     description,
@@ -65,7 +71,7 @@ export const createStudio = async (
 };
 
 export const getStudios = async (): Promise<Studios[]> => {
-  const snap = await getDocs(collection(db, "studios"));
+  const snap = await getDocs(collection(getDb(), "studios"));
 
   return snap.docs.map((d) => {
     const data = d.data() as {
@@ -98,11 +104,11 @@ export const updateStudio = async (
   id: string,
   data: Partial<Studios>
 ): Promise<void> => {
-  await updateDoc(doc(db, "studios", id), data);
+  await updateDoc(doc(getDb(), "studios", id), data);
 };
 
 export const deleteStudio = async (id: string): Promise<void> => {
-  await deleteDoc(doc(db, "studios", id));
+  await deleteDoc(doc(getDb(), "studios", id));
 };
 
 /* =========================================================
@@ -114,7 +120,7 @@ export const createLatestUpdate = async (
   title: string,
   description?: string
 ): Promise<void> => {
-  await addDoc(collection(db, "updates"), {
+  await addDoc(collection(getDb(), "updates"), {
     userId,
     title,
     description: description ?? "",
@@ -123,7 +129,7 @@ export const createLatestUpdate = async (
 };
 
 export const getLatestUpdates = async (): Promise<LatestUpdate[]> => {
-  const snap = await getDocs(collection(db, "updates"));
+  const snap = await getDocs(collection(getDb(), "updates"));
 
   return snap.docs.map((d) => {
     const data = d.data() as {
@@ -147,7 +153,7 @@ export const getLatestUpdates = async (): Promise<LatestUpdate[]> => {
 };
 
 export const deleteUpdates = async (id: string): Promise<void> => {
-  await deleteDoc(doc(db, "updates", id));
+  await deleteDoc(doc(getDb(), "updates", id));
 };
 
 /* =========================================================
@@ -160,7 +166,7 @@ export const createProgress = async (
   description: string,
   tags: string[]
 ): Promise<void> => {
-  await addDoc(collection(db, "progress"), {
+  await addDoc(collection(getDb(), "progress"), {
     userId,
     title,
     description,
@@ -170,7 +176,7 @@ export const createProgress = async (
 };
 
 export const getProgress = async (): Promise<Progress[]> => {
-  const snap = await getDocs(collection(db, "progress"));
+  const snap = await getDocs(collection(getDb(), "progress"));
 
   return snap.docs.map((d) => {
     const data = d.data() as {
@@ -196,5 +202,5 @@ export const getProgress = async (): Promise<Progress[]> => {
 };
 
 export const deleteProgress = async (id: string): Promise<void> => {
-  await deleteDoc(doc(db, "progress", id));
+  await deleteDoc(doc(getDb(), "progress", id));
 };
