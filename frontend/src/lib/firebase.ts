@@ -1,7 +1,7 @@
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { Auth, getAuth, GoogleAuthProvider } from "firebase/auth";
+import { Firestore, getFirestore } from "firebase/firestore";
+import { FirebaseStorage, getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,16 +13,23 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// apiKey が未定義の場合（SSR/ビルド時）は初期化をスキップする。
-// useEffect 内でのみ使われるため、実行時（クライアント側）では必ず定義済みになる。
 function initApp(): FirebaseApp | undefined {
-  if (!firebaseConfig.apiKey) return undefined;
+  if (!firebaseConfig.apiKey) {
+    if (typeof window !== "undefined") {
+      console.error(
+        "[Replica] Firebase 環境変数が未設定です。\n" +
+        "Vercel ダッシュボード → Settings → Environment Variables に\n" +
+        "NEXT_PUBLIC_FIREBASE_* を全て追加してから再デプロイしてください。"
+      );
+    }
+    return undefined;
+  }
   return !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 }
 
 const app = initApp();
 
-export const auth = app ? getAuth(app) : null!;
+export const auth: Auth | null = app ? getAuth(app) : null;
 export const provider = new GoogleAuthProvider();
-export const db = app ? getFirestore(app) : null!;
-export const storage = app ? getStorage(app) : null!;
+export const db: Firestore | null = app ? getFirestore(app) : null;
+export const storage: FirebaseStorage | null = app ? getStorage(app) : null;

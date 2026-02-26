@@ -1,17 +1,10 @@
 // components/replica/Header.tsx
 "use client";
-import Link from "next/link";
-import React, { useEffect } from "react";
-import { signOut } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { signOut, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useWindowSize } from "@/hooks/useWindowSize";
-import { px } from "framer-motion";
-import { error } from "console";
-import Dialogs from "@/components/ui/Dialogs";
-import { div } from "framer-motion/client";
 // type HeaderProps = {
 //     onToggleSidebar: () => void;
 // }
@@ -19,24 +12,18 @@ import { div } from "framer-motion/client";
 export function Header() {
     const { width, height } = useWindowSize();
     const router = useRouter();
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [open, setOpen] = useState(false);
-    const [sideopen, setSideopen] = useState<any>(false);
     const [openSearch, setOpenSearch] = useState(false);
     const logout = () => {
-        signOut(auth);
+        if (auth) signOut(auth);
         return router.push('/');
-    }
+    };
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('ユーザー情報取得・完了');
-                setUser(user);
-            } else {
-                console.log('未ログイン');
-                setUser(null)
-            }
+        if (!auth) return;
+        const unsubscribe = onAuthStateChanged(auth, (u) => {
+            setUser(u ?? null);
             setLoading(false);
         });
         return () => unsubscribe();

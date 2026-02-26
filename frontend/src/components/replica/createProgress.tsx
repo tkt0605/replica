@@ -26,6 +26,7 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
     "実験中",
   ]
   useEffect(() => {
+    if (!auth) return;
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u ?? null);
       setLoading(false);

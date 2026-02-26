@@ -12,12 +12,15 @@ export default function Login() {
   const router = useRouter();
   // const supabase = createClient();
   const handleLogin = async () => {
+    if (!auth) {
+      setError("Firebase が初期化されていません。環境変数を確認してください。");
+      return;
+    }
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("ログイン成功！");
       return router.push('/home');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "ログインに失敗しました");
       return router.push('/auth/login');
     }
   };

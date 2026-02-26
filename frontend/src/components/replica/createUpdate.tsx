@@ -18,6 +18,7 @@ export default function CreateUpdate({ open, onClose }: CreateUpdateDialogProps)
   useEffect(() => {
     if (!open) return; // ダイアログが閉じられてるときは実行しない
 
+    if (!auth) return;
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u ?? null);
     });

@@ -14,23 +14,19 @@ export default function Signup() {
 
     const handleSignUp = async () => {
         setError("");
-    
+
+        if (!auth) {
+            setError("Firebase が初期化されていません。環境変数を確認してください。");
+            return;
+        }
+
         try {
-          // ユーザーアカウント作成
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          const user = userCredential.user;
-    
-          // メール確認を送信
-          await sendEmailVerification(user);
-    
+          await sendEmailVerification(userCredential.user);
           alert("確認メールを送信しました！メールをご確認ください。");
-        //   console.log("アカウント作成成功:", user.uid);
-    
-          // ログインページへ
           router.push("/auth/login");
-        } catch (err: any) {
-          console.error("Signup Error:", err);
-          setError(err.message || "サインアップに失敗しました。");
+        } catch (err: unknown) {
+          setError(err instanceof Error ? err.message : "サインアップに失敗しました。");
         }
     };
     return (

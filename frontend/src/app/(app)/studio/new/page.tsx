@@ -28,6 +28,7 @@ export default function NewStudioPage() {
         url: string;
     }
     useEffect(() => {
+        if (!auth) return;
         const unsubscribe = onAuthStateChanged(auth, (u) => {
             setUser(u ?? null);
             isLoading(false);

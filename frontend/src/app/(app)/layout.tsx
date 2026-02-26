@@ -92,6 +92,7 @@ export default function DashbordLayout({ children }: DashboardLayoutProps) {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+        if (!auth) return;
         const unsubscribe = onAuthStateChanged(auth, (u) => {
             setUser(u ?? null);
             setLoading(false);

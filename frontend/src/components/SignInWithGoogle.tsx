@@ -8,6 +8,10 @@ export const SignInWithGoogle = () => {
   const provider = new GoogleAuthProvider();
 
   const handleGoogleLogin = async () => {
+    if (!auth) {
+      alert("Firebase が初期化されていません。環境変数を確認してください。");
+      return;
+    }
     try {
       await signInWithPopup(auth, provider);
       router.push("/home");

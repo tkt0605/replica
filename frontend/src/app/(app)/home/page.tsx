@@ -22,12 +22,12 @@ export default function Home() {
     const cardStyle = "group relative overflow-hidden rounded-2xl bg-[#161617] border border-white/10 p-6 transition-all duration-300 hover:bg-[#1c1c1e] hover:border-white/20 hover:shadow-2xl hover:shadow-black/50 hover:-translate-y-1 cursor-pointer";
     // 初期読み込み時に localStorage の値を参照
     useEffect(() => {
+        if (!auth) return;
         const unsubscribe = onAuthStateChanged(auth, (u) => {
             setUser(u ?? null);
             setLoading(false);
         });
         return () => unsubscribe();
-
     }, []);
     useEffect(() => {
         (async () => {
