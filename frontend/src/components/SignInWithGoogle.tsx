@@ -9,15 +9,9 @@ export const SignInWithGoogle = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      // Google ログイン
-      const result = await signInWithPopup(auth, provider);
-
-      console.log("Google ログイン成功:", result.user);
-
-      // ログイン成功後の遷移
+      await signInWithPopup(auth, provider);
       router.push("/home");
-    } catch (error: any) {
-      console.error("Google ログイン失敗:", error);
+    } catch {
       alert("Google ログインでエラーが発生しました");
     }
   };

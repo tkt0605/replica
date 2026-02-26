@@ -1,19 +1,10 @@
 "use client";
 import React from "react";
-import { useState, useContext, useEffect } from "react";
-import { db, storage } from "@/lib/firebase";
-import { AuthContext } from "@/components/FirebaseProvider";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-} from "firebase/firestore";
-import {
-  createProgress,
-} from '@/lib/firestore';
+import { createProgress } from '@/lib/firestore';
 interface CreateProgressDialogProps {
   open: boolean;
   onClose: () => void;
@@ -21,7 +12,7 @@ interface CreateProgressDialogProps {
 export default function CreateProgress({ open, onClose }: CreateProgressDialogProps) {
   // const ProgressDialog: React.FC<CreateProgressDialogProps> = ({open, onClose}) => {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [title, SetTitle] = useState('');
   const [nemo, setNemo] = useState('');
@@ -35,15 +26,8 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
     "実験中",
   ]
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!open) return;
-      if (user) {
-        console.log('ログイン・ユーザ', user);
-        setUser(user);
-      } else {
-        console.log('非ログインユーザー');
-        setUser(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u ?? null);
       setLoading(false);
     });
     return () => unsubscribe();
@@ -57,17 +41,16 @@ export default function CreateProgress({ open, onClose }: CreateProgressDialogPr
     }
   };
   const hundleSubmit = async () => {
+    if (!user) return alert("ログインが必要です");
+    if (!title.trim()) return alert("タイトルを入力してください");
+    if (title.length > 100) return alert("タイトルは100文字以内で入力してください");
+    if (nemo.length > 1000) return alert("内容は1000文字以内で入力してください");
+
     try {
-      await createProgress(
-        user.uid,
-        title,
-        nemo,
-        tags
-      )
+      await createProgress(user.uid, title.trim(), nemo.trim(), tags);
       onClose();
       return router.push('/home');
-    } catch (error) {
-      console.error("投稿エラー:", error);
+    } catch {
       alert("投稿中にエラーが発生しました");
     }
   };

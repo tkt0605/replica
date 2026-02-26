@@ -1,21 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { auth } from "@/lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import {
-  createStudio,
-  createLatestUpdate,
-  createProgress,
-  getLatestUpdates,
-  getProgress,
-  getStudios,
-  updateStudio,
-  deleteProgress,
-  deleteStudio,
-  deleteUpdates,
-} from '@/lib/firestore';
+import { createLatestUpdate } from '@/lib/firestore';
 interface CreateUpdateDialogProps {
   open: boolean;
   onClose: () => void;
@@ -23,7 +10,7 @@ interface CreateUpdateDialogProps {
 
 export default function CreateUpdate({ open, onClose }: CreateUpdateDialogProps) {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [title, setTitle] = useState("");
   const [nemo, setNemo] = useState("");
 
@@ -45,16 +32,14 @@ export default function CreateUpdate({ open, onClose }: CreateUpdateDialogProps)
     if (!user) return alert("ログインが必要です");
     if (!title) return alert("タイトルを入力してください");
 
+    if (title.length > 100) return alert("タイトルは100文字以内で入力してください");
+    if (nemo.length > 1000) return alert("内容は1000文字以内で入力してください");
+
     try {
-      await createLatestUpdate(
-        user?.uid,
-        title,
-        nemo
-      );
+      await createLatestUpdate(user.uid, title.trim(), nemo.trim());
       onClose();
       router.push("/home");
-    } catch (error) {
-      console.error("投稿エラー:", error);
+    } catch {
       alert("投稿中にエラーが発生しました");
     }
   };

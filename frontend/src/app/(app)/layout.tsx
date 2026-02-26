@@ -79,7 +79,7 @@ import { Sidebar } from "@/components/replica/SideBar";
 import { Header } from "@/components/replica/Header";
 import { MobileSidebar } from "@/components/replica/MobileSidebar";
 import { auth } from "@/lib/firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 // 型定義
 interface DashboardLayoutProps {
@@ -87,26 +87,17 @@ interface DashboardLayoutProps {
 }
 
 export default function DashbordLayout({ children }: DashboardLayoutProps) {
-    const [drawerOpen, setDrawerOpen] = useState(false); // 使わないなら削除推奨
     const [isOpen, setOpen] = useState(false);
-    const [user, setUser] = useState<any>(null);
-    const [loading, setLoading] = useState<boolean>(true); // 初期値はtrueが良いです
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('login User', user);
-                setUser(user);
-            } else {
-                console.log('Not Login', user);
-                setUser(null);
-            }
+        const unsubscribe = onAuthStateChanged(auth, (u) => {
+            setUser(u ?? null);
             setLoading(false);
         });
         return () => unsubscribe();
     }, []);
-
-    // toggleSidebarなどは使われていないため、コンポーネントに渡すか削除が必要です
 
     return (
         <div className="min-h-screen flex bg-[#000000]">
@@ -116,11 +107,7 @@ export default function DashbordLayout({ children }: DashboardLayoutProps) {
                 )}
             </div>
             
-            {/* メインコンテンツエリア */}
             <div className={`flex-1 flex flex-col ${!isOpen ? 'md:ml-60' : ''}`}>
-                 {/* 元のコードでは isOpen と !isOpen で同じ内容を2回書いていましたが、
-                    クラスの切り替えだけで対応できるためまとめました。
-                 */}
                 <Header />
                 <MobileSidebar/>
                 <main className="flex-1 mt-4">

@@ -1,34 +1,18 @@
 "use client";
-import Link from "next/link";
-import { Header } from "@/components/replica/Header";
-import { Sidebar } from "@/components/replica/SideBar";
-import { MainShell } from "@/components/replica/MainShell";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import Dialogs from "@/components/ui/Dialogs";
 import CreateUpdate from "@/components/replica/createUpdate";
 import CreateProgress from "@/components/replica/createProgress";
 import { Plus, Github, ArrowRight,Instagram , Layers, Activity } from 'lucide-react';
 import {
-    createStudio,
-    createLatestUpdate,
-    createProgress,
     getLatestUpdates,
     getProgress,
-    getStudios,
-    updateStudio,
-    deleteProgress,
-    deleteStudio,
-    deleteUpdates,
     LatestUpdate,
-    Progress
+    Progress,
 } from '@/lib/firestore';
 export default function Home() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [updates, setUpdates] = useState<LatestUpdate[]>([]);
     const [progress, setProgress] = useState<Progress[]>([]);
@@ -38,14 +22,8 @@ export default function Home() {
     const cardStyle = "group relative overflow-hidden rounded-2xl bg-[#161617] border border-white/10 p-6 transition-all duration-300 hover:bg-[#1c1c1e] hover:border-white/20 hover:shadow-2xl hover:shadow-black/50 hover:-translate-y-1 cursor-pointer";
     // 初期読み込み時に localStorage の値を参照
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('ログインユーザー：', user);
-                setUser(user);
-            } else {
-                console.log('非ログイン');
-                setUser(null);
-            }
+        const unsubscribe = onAuthStateChanged(auth, (u) => {
+            setUser(u ?? null);
             setLoading(false);
         });
         return () => unsubscribe();
@@ -88,7 +66,7 @@ export default function Home() {
                                 <Activity className="w-5 h-5 text-gray-500" />
                                 最新の更新
                             </h2>
-                            { user?.email == "takatokomada17@gmail.com"  && (
+                            { user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
                                                             <button 
                                 
                                                             onClick={() => setOpenUpdated(true)}
@@ -151,7 +129,7 @@ export default function Home() {
                                 <Layers className="w-5 h-5 text-gray-500" />
                                 進行中のプロジェクト
                             </h2>
-                            {user?.email == "takatokomada17@gmail.com" && (
+                            {user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL && (
                                                             <button
                                                                 onClick={() => setOpenProgress(true)}
                                                                 className="text-sm font-medium text-blue-500 hover:text-blue-400 transition-colors flex items-center gap-1"
