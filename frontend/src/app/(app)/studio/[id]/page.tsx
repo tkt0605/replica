@@ -8,6 +8,7 @@ import {
   getDoc,
   getFirestore,
   DocumentData,
+  Firestore,
 } from "firebase/firestore";
 
 interface Studio {
@@ -19,7 +20,12 @@ interface Studio {
   ownerId: string;
   url: string;
   createdAt: { seconds: number; nanoseconds: number };
+}function getDb(): Firestore {
+  if (!db) throw new Error("Firestore が初期化されていません。NEXT_PUBLIC_FIREBASE_* 環境変数を確認してください。");
+  return db;
 }
+
+
 
 export default function StudioDetailPage() {
   const params = useParams();
@@ -31,16 +37,16 @@ export default function StudioDetailPage() {
   useEffect(() => {
     const fetchStudio = async () => {
       try {
-        const ref = doc(db, "studios", id);
+        const ref = doc(getDb(), "studios", id);
         const snap = await getDoc(ref);
 
         if (snap.exists()) {
           setStudio({ id: snap.id, ...snap.data() } as Studio);
         } else {
-          console.log("Studio not found.");
+          throw new Error("Studio not found.");
         }
-      } catch (e) {
-        console.error("Error fetching studio:", e);
+      } catch {
+        console.error("Error fetching studio.");
       }
 
       setLoading(false);
